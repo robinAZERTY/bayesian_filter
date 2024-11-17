@@ -83,14 +83,14 @@ class Ekf
     bool initted = false;
 public:
     Vector<T> X = Vector<T>(x_dim);              // state
-    Vector<T> dx = Vector<T>(x_dim);             // small state espilon for numerical differentiation
+    Vector<T> dx = Vector<T>(x_dim);             // small state epsilon for numerical differentiation
     symMatrix<T> P = symMatrix<T>(x_dim, x_dim); // state covariance
     Vector<T> U = Vector<T>(u_dim);              // command input
-    Vector<T> du = Vector<T>(u_dim);             // small command espilon for numerical differentiation
+    Vector<T> du = Vector<T>(u_dim);             // small command epsilon for numerical differentiation
     symMatrix<T> Cov_U = symMatrix<T>(u_dim);        // process noise covariance
     Vector<T> C = Vector<T>(c_dim);                  // system parameters
-    Vector<T> dc = Vector<T>(c_dim);                 // small system parameters espilon for numerical differentiation
-    Vector<bool> updateMalhalanobis = Vector<bool>(z_num); // update the Mahalanobis distance
+    Vector<T> dc = Vector<T>(c_dim);                 // small system parameters epsilon for numerical differentiation
+    Vector<bool> updateMahalanobis = Vector<bool>(z_num); // update the Mahalanobis distance
     Ekf();
     Ekf(Vector_f3<T> f) : Ekf() { setPredictionFunction(f); }
     ~Ekf(){};

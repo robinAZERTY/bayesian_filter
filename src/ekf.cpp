@@ -30,7 +30,7 @@ Ekf<x_dim, u_dim, c_dim, z_num, T>::Ekf()
     dx.fill(1e-4);
     du.fill(1e-4);
     dc.fill(1e-4);
-    updateMalhalanobis.fill(false);
+    updateMahalanobis.fill(false);
 }
 
 template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
@@ -144,7 +144,7 @@ inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::update(const Vector<T> &Z, const
     X.addMul(K, y[z_idx]);             // update the state
     P.subMul(K, H_P[z_idx]);           // update the state covariance
 
-    if (!updateMalhalanobis[z_idx])
+    if (!updateMahalanobis[z_idx])
         return;
         
     T dd = y[z_idx].dot(*(S_inv[z_idx] * y[z_idx]).release()); // squared Mahalanobis distance

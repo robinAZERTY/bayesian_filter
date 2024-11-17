@@ -1,0 +1,30 @@
+{
+  "name": "bayesian_filters",
+  "version": "0.0.0",
+  "description": "An optimized C++ library for the ESP32, providing Kalman filters.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robinAZERTY/bayesian_filters.git"
+  },
+  "authors": [
+    {
+      "name": "robinAZERTY"
+    }
+  ],
+  "license": "GPL-3.0-only",
+  "dependencies": [
+    {
+      "name": "robin-azerty/linear algebra",
+      "version": "0.0.1",
+      "url": "https://github.com/robinAZERTY/linear_algebra.git"
+    }
+  ],
+  "platforms": [
+    "espressif32",
+    "native"
+  ],
+  "frameworks": [
+    "arduino",
+    "*"
+  ]
+}
