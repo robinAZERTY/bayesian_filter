@@ -3,7 +3,7 @@
 This library currently includes an Extended Kalman Filter (EKF) developed alongside [a linear algebra library](https://github.com/robinAZERTY/linear_algebra). Both are designed to be lightweight and efficient, making them ideal for use on embedded platforms. They are also intended to be independent of any external libraries.
 
 ## Classe(s) architecture
-![Classes diagram](docs/classDiagram.svg)
+![Classes diagram](docs/architecture/classDiagram.svg)
 
 ## Time efficiency
 The duration of prediction and update steps in the Extended Kalman Filter (EKF) is analyzed below. To do this, time measurements were taken for several problem sizes, varying the number of states (X_DIM), the number of control inputs (U_DIM) and the dimension of the measurement vector (Z_dim). Speed tests ran on ESP32 with numerical jacobian's computation enabled. This gives an idea of the maximum frequency at which this class can operate for a given problem's size.
