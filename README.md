@@ -8,9 +8,9 @@ This library currently includes an Extended Kalman Filter (EKF) developed alongs
 ## Time efficiency
 The duration of prediction and update steps in the Extended Kalman Filter (EKF) is analyzed below. To do this, time measurements were taken for several problem sizes, varying the number of states (X_dim), the number of control inputs (U_DIM) and the dimension of the measurement vector (Z_dim). Speed tests ran on ESP32 with numerical jacobian's computation enabled. This gives an idea of the maximum frequency at which this class can operate for a given problem's size.
 
-![Efficiency](docs/ekf_complexity_analysis.png)
+![Efficiency](docs/efficiency/ekf_complexity_analysis.png)
 The complexity of the EKF is obviously O(n^3).
-For more details, see the [ekf_complexity_analysis](docs/ekf_complexity_analysis.json) where coefficients are stored and can be used to predict the time needed (in micros second) for a given problem size.
+For more details, see the [ekf_complexity_analysis](docs/efficiency/ekf_complexity_analysis.json) where coefficients are stored and can be used to predict the time needed (in micros second) for a given problem size.
 
 ## Usage
 This library is ideal for anyone learning how filters work in C++ on embedded platforms. The current release includes foundational an Extended Kalman filter, using [this linear algebra library](https://github.com/robinAZERTY/linear_algebra).
