@@ -18,7 +18,7 @@ This library is ideal for anyone learning how filters work in C++ on embedded pl
 ## Current State
 The library is still in development, the EKF should be functional, but not fully tested yet, so don't expect anything to work properly.
 
-Here is the [latest test coverage report](https://robinazerty.github.io/bayesian_filters/coverage_report/index.html) as folder of html, so you need to download it first.
+Here is the [latest test coverage report](https://robinazerty.github.io/bayesian_filters/coverage_report/index.html).
 
 
 ## Roadmap
