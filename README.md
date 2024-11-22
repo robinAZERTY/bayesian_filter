@@ -6,7 +6,7 @@ This library currently includes an Extended Kalman Filter (EKF) developed alongs
 ![Classes diagram](docs/classDiagram.svg)
 
 ## Time efficiency
-The duration of prediction and update steps in the Extended Kalman Filter (EKF) is analyzed below. To do this, time measurements were taken for several problem sizes, varying the number of states (X_dim), the number of control inputs (U_DIM) and the dimension of the measurement vector (Z_dim). Speed tests ran on ESP32 with numerical jacobian's computation enabled. This gives an idea of the maximum frequency at which this class can operate for a given problem's size.
+The duration of prediction and update steps in the Extended Kalman Filter (EKF) is analyzed below. To do this, time measurements were taken for several problem sizes, varying the number of states (X_DIM), the number of control inputs (U_DIM) and the dimension of the measurement vector (Z_dim). Speed tests ran on ESP32 with numerical jacobian's computation enabled. This gives an idea of the maximum frequency at which this class can operate for a given problem's size.
 
 ![Efficiency](docs/efficiency/ekf_complexity_analysis.png)
 The complexity of the EKF is obviously O(n^3).
