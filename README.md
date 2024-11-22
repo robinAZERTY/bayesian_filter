@@ -26,8 +26,8 @@ Here is the [latest test coverage report](docs/coverage_report) as folder of htm
 - [X] Implement 1 dimensional tests for EKF
 - [X] Implement n dimensional tests for EKF
 - [X] Implement performance tests for EKF
-- [ ] write documentation
-- [ ] write examples
+- [ ] write documentation for EKF
+- [ ] write examples for EKF
       
 Do the same for UKF and particle filter.
 
