@@ -152,8 +152,7 @@ init_filter_content += "}\n"
 data_content += init_filter_content
 
 # Lecture du fichier C++ et remplacement entre balises
-# input_file = 'test\A_unitary\ekf\unidimentional_linear_stable\\test_run\main.cpp'
-input_file = 'test/A_unitary/ekf/A_unidimentional_linear_stable/test_run/main.cpp'
+input_file = 'test/A_unitary/ekf/A_unidimensional_linear_stable/test_run/main.cpp'
 with open(input_file, 'r') as file:
     content = file.read()
 
