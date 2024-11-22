@@ -16,10 +16,7 @@ For more details, see the [ekf_complexity_analysis](docs/efficiency/ekf_complexi
 This library is ideal for anyone learning how filters work in C++ on embedded platforms. The current release includes foundational an Extended Kalman filter, using [this linear algebra library](https://github.com/robinAZERTY/linear_algebra).
 
 ## Current State
-The library is still in development, the EKF should be functional, but not fully tested yet, so don't expect anything to work properly.
-
-Here is the [latest test coverage report](https://robinazerty.github.io/bayesian_filters/coverage_report/index.html).
-
+The library is still under development. The EKF has been tested and should be functional, as verified using UNITY. Refer to the [test section](test/) for details about the testing process, and check the [latest test coverage report](https://robinazerty.github.io/bayesian_filters/coverage_report/index.html) for an overview of the current coverage.
 
 ## Roadmap
 - [X] Implement EKF
