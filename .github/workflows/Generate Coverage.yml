@@ -3,8 +3,8 @@ name: Generate Test Coverage Report
 on:
     push:
         paths:
-        - 'lib/ESP32AlgebraFilters/**'
-        - 'lib/linearAlgebra/**'
+        - 'include/**'
+        - 'src/**'
         - 'test/**'
 
 jobs:
@@ -44,21 +44,21 @@ jobs:
           # Capturer la couverture uniquement pour ESP32AlgebraFilters et linearAlgebra
           lcov --directory . --capture --output-file coverage.info
           # Inclure uniquement les répertoires souhaités
-          lcov --extract coverage.info "*lib/ESP32AlgebraFilters/*" "*lib/linearAlgebra/*" --output-file coverage.info
+          lcov --extract coverage.info "*include/*" "*src/*" --output-file coverage.info
           # Liste les informations de couverture
           lcov --list coverage.info
           
       - name: Generate HTML Report
         run: |
-          rm -rf lib/ESP32AlgebraFilters/docs/coverage_report
-          mkdir -p lib/ESP32AlgebraFilters/docs/coverage_report
-          genhtml coverage.info --output-directory lib/ESP32AlgebraFilters/docs/coverage_report
+          rm -rf docs/coverage_report
+          mkdir -p docs/coverage_report
+          genhtml coverage.info --output-directory docs/coverage_report
 
       - name: Commit Coverage Report
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'actions@github.com'
-          git add lib/ESP32AlgebraFilters/docs/coverage_report/*
+          git add docs/coverage_report/*
           git commit -m "Update coverage report"
           git pull
           git push
