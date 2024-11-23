@@ -43,6 +43,11 @@ using namespace operators;
  * 
  * The EKF will then handle the state prediction, measurement update, and state covariance estimation.
  * 
+ * The filter supports multiple types of sensors, with each sensor having its own measurement function and Jacobian. 
+ * The number of sensor types (`z_num`) can be customized, allowing for flexibility in handling various measurements within the same filter.
+ * 
+ * The class also supports numerical differentiation for computing Jacobians if analytical expressions are not available, making it versatile for different models.
+ * 
  * @tparam x_dim The dimension of the state vector.
  * @tparam u_dim The dimension of the control input vector.
  * @tparam c_dim The dimension of the system parameters (default is 1).

@@ -21,6 +21,13 @@
 #include "ekf.hpp"
 
 
+
+/**
+ * @brief Default constructor for the EKF filter.
+ * 
+ * Initializes the state vector `X`, the state covariance `P`, and other necessary vectors to default values. 
+ * Sets small values for numerical differentiation and initializes Mahalanobis distance tracking.
+ */
 template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
 Ekf<x_dim, u_dim, c_dim, z_num, T>::Ekf()
 {
@@ -33,6 +40,13 @@ Ekf<x_dim, u_dim, c_dim, z_num, T>::Ekf()
     updateMahalanobis.fill(false);
 }
 
+/**
+ * @brief Numerical differentiation for the state transition Jacobian (Fx) using finite differences.
+ * 
+ * This function approximates the Jacobian of the state transition function with respect to the state vector.
+ * 
+ * @param i The index of the state dimension to compute the Jacobian.
+ */
 template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
 inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::finite_diff_Fx(const size_t i)
 {
@@ -44,6 +58,13 @@ inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::finite_diff_Fx(const size_t i)
     prev_X[i] -= eps;
 }
 
+/**
+ * @brief Numerical differentiation for the control input transition Jacobian (Fu) using finite differences.
+ * 
+ * This function approximates the Jacobian of the state transition function with respect to the control input vector.
+ * 
+ * @param i The index of the control input dimension to compute the Jacobian.
+ */
 template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
 inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::finite_diff_Fu(const size_t i)
 {
@@ -55,6 +76,14 @@ inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::finite_diff_Fu(const size_t i)
     U[i] -= eps;
 }
 
+/**
+ * @brief Numerical differentiation for the measurement Jacobian (H) using finite differences.
+ * 
+ * This function approximates the Jacobian of the measurement function with respect to the state vector.
+ * 
+ * @param z_idx The index of the measurement type.
+ * @param i The index of the state dimension to compute the Jacobian.
+ */
 template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
 inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::finite_diff_H(const size_t z_idx, const size_t i)
 {
@@ -66,6 +95,13 @@ inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::finite_diff_H(const size_t z_idx
     X[i] -= eps;
 }
 
+/**
+ * @brief Computes the innovation covariance (S) for the specified measurement type.
+ * 
+ * This function calculates the inverse of the innovation covariance matrix using the measurement Jacobian and the state covariance.
+ * 
+ * @param z_idx The index of the measurement type.
+ */
 template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
 void Ekf<x_dim, u_dim, c_dim, z_num, T>::compute_S(const size_t z_idx)
 {
@@ -76,6 +112,16 @@ void Ekf<x_dim, u_dim, c_dim, z_num, T>::compute_S(const size_t z_idx)
     S_inv[z_idx].holdMul(*((H_val[z_idx].T) * P).release(), H_val[z_idx]);
 }
 
+/**
+ * @brief Sets the measurement function for a specific sensor type.
+ * 
+ * This function defines the measurement function and measurement dimension for a particular sensor type.
+ * It also initializes the corresponding Jacobians and matrices.
+ * 
+ * @param h The measurement function for the sensor type.
+ * @param z_dim The dimension of the measurement vector for the sensor.
+ * @param z_idx The index of the sensor type (default is 0).
+ */
 template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
 void Ekf<x_dim, u_dim, c_dim, z_num, T>::setMeasurementFunction(Vector_f2<T> h, size_t z_dim, size_t z_idx)
 {
@@ -85,6 +131,14 @@ void Ekf<x_dim, u_dim, c_dim, z_num, T>::setMeasurementFunction(Vector_f2<T> h, 
     this->S_inv[z_idx].resize(z_dim);
 }
 
+/**
+ * @brief Predicts the state using the state transition function.
+ * 
+ * This function computes the predicted state `X` based on the previous state and the state transition function.
+ * It also updates the state covariance matrix `P` based on the state transition Jacobian.
+ * 
+ * Throws an exception if the state transition function is not set.
+ */
 template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
 inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::predict()
 {
@@ -116,6 +170,18 @@ inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::predict()
     P.addMul(*(Fu_val_T.T * Cov_U).release(), Fu_val_T);
 }
 
+/**
+ * @brief Updates the state and covariance matrix using a new measurement and measurement noise covariance.
+ * 
+ * This function updates the state vector `X` and the state covariance matrix `P` based on the new measurement `Z`
+ * and the measurement noise covariance matrix `R`. The Kalman gain is also computed and used to adjust the state.
+ * 
+ * Throws an exception if the measurement function is not set or if there is a dimension mismatch.
+ * 
+ * @param Z The new measurement vector.
+ * @param R The measurement noise covariance matrix.
+ * @param z_idx The index of the measurement type (default is 0).
+ */
 template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
 inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::update(const Vector<T> &Z, const symMatrix<T> &R, const size_t z_idx)
 {
