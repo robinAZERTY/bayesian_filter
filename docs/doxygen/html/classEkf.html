@@ -168,7 +168,6 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
 </div><div class="memdoc">
 
 <p>Default constructor for the EKF filter. </p>
-<p>Default constructor</p>
 <p>Initializes the state vector <code>X</code>, the state covariance <code>P</code>, and other necessary vectors to default values. Sets small values for numerical differentiation and initializes Mahalanobis distance tracking. </p>
 
 </div>
@@ -283,7 +282,6 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
 </div><div class="memdoc">
 
 <p>Predicts the state using the state transition function. </p>
-<p>Perform the prediction step of the EKF</p>
 <p>This function computes the predicted state <code>X</code> based on the previous state and the state transition function. It also updates the state covariance matrix <code>P</code> based on the state transition Jacobian.</p>
 <p>Throws an exception if the state transition function is not set. </p>
 
@@ -421,7 +419,6 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
 </div><div class="memdoc">
 
 <p>Sets the measurement function for a specific sensor type. </p>
-<p>Set the measurement function for a specific measurement type</p>
 <p>This function defines the measurement function and measurement dimension for a particular sensor type. It also initializes the corresponding Jacobians and matrices.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -506,7 +503,6 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
 </div><div class="memdoc">
 
 <p>Updates the state and covariance matrix using a new measurement and measurement noise covariance. </p>
-<p>Perform the update step of the EKF with a measurement vector</p>
 <p>This function updates the state vector <code>X</code> and the state covariance matrix <code>P</code> based on the new measurement <code>Z</code> and the measurement noise covariance matrix <code>R</code>. The Kalman gain is also computed and used to adjust the state.</p>
 <p>Throws an exception if the measurement function is not set or if there is a dimension mismatch.</p>
 <dl class="params"><dt>Parameters</dt><dd>
