@@ -18,23 +18,6 @@
  */
 
 
-/*
-The Ekf class implements the Extended Kalman Filter (EKF), a recursive filter used for estimating the state of a dynamic system from noisy measurements. 
-This updated version introduces a more streamlined and flexible approach to EKF implementation compared to the previous version.
-
-Key changes:
-- Improved modularity: The class now uses templates and function pointers for greater flexibility in defining state transition and measurement functions.
-- Reduced memory usage: Temporary matrices and vectors are allocated dynamically as needed, optimizing memory consumption.
-- Simplified interface: The class provides template-based methods for prediction, measurement, and update steps, allowing for easy customization and extension.
-
-functional methods:
-- predict(): Propagates the state using the provided state transition function and command input, along with the specified process noise covariance matrix.
-- update(): Updates the state based on the measurement, using the predicted measurement, its associated innovation covariance matrix, and optionally, the measurement Jacobian
-
-Next steps:
-- Integration with other filtering techniques such as the Unscented Kalman Filter (UKF) for comparison and performance evaluation.
-*/
-
 
 #ifndef EKF_HPP
 #define EKF_HPP
@@ -43,6 +26,29 @@ Next steps:
 #include "symMatrix.hpp"
 using namespace operators;
 
+/**
+ * @class Ekf
+ * @brief A generic implementation of an Extended Kalman Filter (EKF).
+ * 
+ * This class provides the core EKF functionality, including state prediction and update steps for nonlinear systems.
+ * It supports dynamic system models and allows for numerical differentiation of Jacobians for both state transition and measurement functions.
+ * 
+ * You must provide several key functions and data to ensure the filter works properly:
+ * 
+ * - **State Transition Function** (`f`): A function that models the evolution of the state vector over time, used for the prediction step.
+ * - **Measurement Function** (`h`): A function that models the measurement process, mapping the state vector to the measurement space.
+ * - **Initial State and Covariance** (`X` and `P`): The user must initialize the state vector `X` and the state covariance matrix `P` with reasonable values for the system.
+ * - **Control Inputs** (`U`): If the system involves control inputs, the user must provide them during the prediction step.
+ * - **Measurement Data** (`Z` and `R`): During the update step, the user must provide the measurement vector `Z` and the measurement noise covariance `R`.
+ * 
+ * The EKF will then handle the state prediction, measurement update, and state covariance estimation.
+ * 
+ * @tparam x_dim The dimension of the state vector.
+ * @tparam u_dim The dimension of the control input vector.
+ * @tparam c_dim The dimension of the system parameters (default is 1).
+ * @tparam z_num The number of measurement types (default is 1).
+ * @tparam T The data type used for calculations (default is float).
+ */
 template <size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, typename T = float>
 class Ekf
 {
@@ -52,62 +58,138 @@ class Ekf
     private:
     #endif
     
-    Vector_f3<T> f = nullptr;          // state transition function
-    size_t z_dim[z_num] = {0};         // measurement dimensions
-    Vector_f2<T> h[z_num] = {nullptr}; // measurement functions
-    Matrix_f3<T> Fx = nullptr;         // state transition Jacobian
-    Matrix_f3<T> Fu = nullptr;         // state transition Jacobian
-    Matrix_f3<T> Fc = nullptr;         // state transition Jacobian
-    Matrix_f2<T> H[z_num] = {nullptr}; // measurement Jacobian
-    Vector<T> y[z_num];                     // measurement residuals
-    float ds[z_num]={1};                     // measurement squared Mahalanobis distance with the estimated state
-    float alpha = 1-5.f/(5+1);                       // filter forgetting factor
-
-    Matrix<T> H_val[z_num];                 // measurement Jacobian values
-    ldl_matrix<T> S_inv[z_num];                 // innovation covariance
-    Vector<T> h_val[z_num];                     // predicted measurement
-    Vector<T> prev_X = Vector<T>(x_dim);        // previous state
-    Matrix<T> Fx_val_T = Matrix<T>(x_dim, x_dim); // state transition matrices
-    Matrix<T> Fu_val_T = Matrix<T>(u_dim, x_dim); // state transition matrices
-    Matrix<T> Fc_val_T = Matrix<T>(c_dim, x_dim); // state transition matrices
+    /** State transition function */
+    Vector_f3<T> f = nullptr;
+    
+    /** Measurement dimensions for each measurement type */
+    size_t z_dim[z_num] = {0};
+    
+    /** Measurement functions for each measurement type */
+    Vector_f2<T> h[z_num] = {nullptr};
+    
+    /** State transition Jacobians */
+    Matrix_f3<T> Fx = nullptr;
+    Matrix_f3<T> Fu = nullptr;
+    Matrix_f3<T> Fc = nullptr;
+    
+    /** Measurement Jacobians for each measurement type */
+    Matrix_f2<T> H[z_num] = {nullptr};
+    
+    /** Measurement residuals for each measurement type */
+    Vector<T> y[z_num];
+    
+    /** Squared Mahalanobis distance for each measurement type */
+    float ds[z_num] = {1};
+    
+    /** Filter forgetting factor (used in recursive filtering) */
+    float alpha = 1 - 5.f / (5 + 1);
+    
+    /** Jacobian values for measurement functions */
+    Matrix<T> H_val[z_num];
+    
+    /** Inverse innovation covariance */
+    ldl_matrix<T> S_inv[z_num];
+    
+    /** Predicted measurement for each measurement type */
+    Vector<T> h_val[z_num];
+    
+    /** Previous state vector */
+    Vector<T> prev_X = Vector<T>(x_dim);
+    
+    /** State transition matrices */
+    Matrix<T> Fx_val_T = Matrix<T>(x_dim, x_dim);
+    Matrix<T> Fu_val_T = Matrix<T>(u_dim, x_dim);
+    Matrix<T> Fc_val_T = Matrix<T>(c_dim, x_dim);
+    
+    /** Kalman gain */
     rowMajorMatrix<T> K;
-
+    
+    /** Measurement Jacobian * State covariance for each measurement type */
     Matrix<T> H_P[z_num];
+    
+    /** Numerical differentiation of the state transition Jacobian */
     inline void finite_diff_Fx(const size_t i);
+    
+    /** Numerical differentiation of the control input transition Jacobian */
     inline void finite_diff_Fu(const size_t i);
-    void finite_diff_Fx(){for (size_t i = 0; i < x_dim; i++) finite_diff_Fx(i);};
-    void finite_diff_Fu(){for (size_t i = 0; i < u_dim; i++) finite_diff_Fu(i);};
-
+    
+    /** Compute Jacobian for state transition using numerical differentiation */
+    void finite_diff_Fx() { for (size_t i = 0; i < x_dim; i++) finite_diff_Fx(i); };
+    
+    /** Compute Jacobian for control input transition using numerical differentiation */
+    void finite_diff_Fu() { for (size_t i = 0; i < u_dim; i++) finite_diff_Fu(i); };
+    
+    /** Numerical differentiation of the measurement Jacobian for a specific measurement */
     void finite_diff_H(const size_t z_idx, const size_t i);
-    void finite_diff_H(const size_t z_idx){for (size_t i = 0; i < x_dim; i++) finite_diff_H(z_idx, i);};
+    
+    /** Compute Jacobian for measurements using numerical differentiation */
+    void finite_diff_H(const size_t z_idx) { for (size_t i = 0; i < x_dim; i++) finite_diff_H(z_idx, i); };
+    
+    /** Compute the innovation covariance matrix for a specific measurement */
     void compute_S(const size_t z_idx);
 
+    /** Flag indicating whether the filter is initialized */
     bool initted = false;
+
 public:
-    Vector<T> X = Vector<T>(x_dim);              // state
-    Vector<T> dx = Vector<T>(x_dim);             // small state epsilon for numerical differentiation
-    symMatrix<T> P = symMatrix<T>(x_dim, x_dim); // state covariance
-    Vector<T> U = Vector<T>(u_dim);              // command input
-    Vector<T> du = Vector<T>(u_dim);             // small command epsilon for numerical differentiation
-    symMatrix<T> Cov_U = symMatrix<T>(u_dim);        // process noise covariance
-    Vector<T> C = Vector<T>(c_dim);                  // system parameters
-    Vector<T> dc = Vector<T>(c_dim);                 // small system parameters epsilon for numerical differentiation
-    Vector<bool> updateMahalanobis = Vector<bool>(z_num); // update the Mahalanobis distance
+    /** Current state vector */
+    Vector<T> X = Vector<T>(x_dim);
+    
+    /** Small state epsilon for numerical differentiation */
+    Vector<T> dx = Vector<T>(x_dim);
+    
+    /** State covariance matrix */
+    symMatrix<T> P = symMatrix<T>(x_dim, x_dim);
+    
+    /** Control input vector */
+    Vector<T> U = Vector<T>(u_dim);
+    
+    /** Small control input epsilon for numerical differentiation */
+    Vector<T> du = Vector<T>(u_dim);
+    
+    /** Process noise covariance matrix */
+    symMatrix<T> Cov_U = symMatrix<T>(u_dim);
+    
+    /** System parameters vector */
+    Vector<T> C = Vector<T>(c_dim);
+    
+    /** Small system parameters epsilon for numerical differentiation */
+    Vector<T> dc = Vector<T>(c_dim);
+    
+    /** Flags indicating whether to update the Mahalanobis distance for each measurement type */
+    Vector<bool> updateMahalanobis = Vector<bool>(z_num);
+    
+    /** Default constructor */
     Ekf();
+    
+    /** Constructor with a state transition function */
     Ekf(Vector_f3<T> f) : Ekf() { setPredictionFunction(f); }
+
+    /** Destructor */
     ~Ekf(){};
 
+    /** Set the state prediction function */
     void setPredictionFunction(Vector_f3<T> f) { this->f = f; }
+    
+    /** Set the Jacobian for state transition */
     void setJacobianFunction_Fx(Matrix_f3<T> Fx) { this->Fx = Fx; }
+    
+    /** Set the Jacobian for control input transition */
     void setJacobianFunction_Fu(Matrix_f3<T> Fu) { this->Fu = Fu; }
 
+    /** Set the measurement function for a specific measurement type */
     void setMeasurementFunction(Vector_f2<T> h, size_t z_dim, size_t z_idx = 0);
+    
+    /** Set the Jacobian for the measurement function */
     void setJacobianFunction_H(Matrix_f2<T> H, size_t z_idx = 0) { this->H[z_idx] = H; }
 
+    /** Perform the prediction step of the EKF */
     inline void predict();
 
+    /** Perform the update step of the EKF with a measurement vector */
     inline void update(const Vector<T> &Z, const symMatrix<T> &R, const size_t z_idx = 0);
 
+    /** Get the Mahalanobis distance for a specific measurement type */
     inline float getMahalanobisDistance(const size_t z_idx = 0) const { return ds[z_idx]; }
 };
 
