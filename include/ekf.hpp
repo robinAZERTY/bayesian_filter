@@ -113,7 +113,6 @@ class Ekf
     Matrix<T> H_P[z_num];
     
     inline void finite_diff_Fx(const size_t i);
-    
     inline void finite_diff_Fu(const size_t i);
     
     /** Compute Jacobian for state transition using numerical differentiation */
