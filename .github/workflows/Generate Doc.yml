@@ -3,7 +3,7 @@ name: Generate Doxygen Documentation
 on:
   push:
     branches:
-      - main  # Déclenche le workflow sur la branche principale
+      - release  # Déclenche le workflow sur la branche principale
     paths:
       - 'src/**'        # Déclenche le workflow si un fichier dans src/ est modifié
       - 'include/**'     # Déclenche le workflow si un fichier dans include/ est modifié
