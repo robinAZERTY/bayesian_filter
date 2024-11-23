@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: Main Page</title>
+<title>My Project: Bayesian filters</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -60,11 +60,48 @@ $(function() {
 </iframe>
 </div>
 
-<div class="header">
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">My Project Documentation</div>  </div>
+<div class="title">Bayesian filters </div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><p><a class="anchor" id="md_README"></a></p>
+<h1><a class="anchor" id="autotoc_md1"></a>
+Overview</h1>
+<p>This library currently includes an Extended Kalman Filter (EKF) developed alongside <a href="https://github.com/robinAZERTY/linear_algebra">a linear algebra library</a>. Both are designed to be lightweight and efficient, making them ideal for use on embedded platforms. They are also intended to be independent of any external libraries.</p>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Classe(s) architecture</h1>
+<p><img src="docs/architecture/classDiagram.svg" alt="Classes diagram" style="pointer-events: none;" class="inline"/></p>
+<h1><a class="anchor" id="autotoc_md3"></a>
+Time efficiency</h1>
+<p>The duration of prediction and update steps in the Extended Kalman Filter (EKF) is analyzed below. To do this, time measurements were taken for several problem sizes, varying the number of states (X_DIM), the number of control inputs (U_DIM) and the dimension of the measurement vector (Z_dim). Speed tests ran on ESP32 with numerical jacobian's computation enabled. This gives an idea of the maximum frequency at which this class can operate for a given problem's size.</p>
+<p><img src="docs/efficiency/ekf_complexity_analysis.png" alt="Efficiency" class="inline"/> The complexity of the EKF is obviously O(n^3). For more details, see the <a href="docs/efficiency/ekf_complexity_analysis.json">ekf_complexity_analysis</a> where coefficients are stored and can be used to predict the time needed (in micros second) for a given problem size.</p>
+<h1><a class="anchor" id="autotoc_md4"></a>
+Usage</h1>
+<p>This library is ideal for anyone learning how filters work in C++ on embedded platforms. The current release includes foundational an Extended Kalman filter, using <a href="https://github.com/robinAZERTY/linear_algebra">this linear algebra library</a>.</p>
+<h1><a class="anchor" id="autotoc_md5"></a>
+Current State</h1>
+<p>The library is still under development. The EKF has been tested and should be functional, as verified using UNITY. Refer to the <a href="test/">test section</a> for details about the testing process, and check the <a href="https://robinazerty.github.io/bayesian_filters/coverage_report/index.html">latest test coverage report</a> for an overview of the current coverage.</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
+Roadmap</h1>
+<ul>
+<li>[X] Implement EKF</li>
+<li>[X] Implement 1 dimensional tests for EKF</li>
+<li>[X] Implement n dimensional tests for EKF</li>
+<li>[X] Implement performance tests for EKF</li>
+<li>[ ] write documentation for EKF</li>
+<li>[ ] write examples for EKF</li>
+</ul>
+<p>Do the same for UKF and particle filter.</p>
+<h1><a class="anchor" id="autotoc_md7"></a>
+License</h1>
+<p>This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.</p>
+<h1><a class="anchor" id="autotoc_md8"></a>
+Developer's Note</h1>
+<p>I'm a student working on this library out of curiosity and a desire to learn about matrix computations and state estimators. Through this project, I aim to deepen my understanding of these concepts, particularly in the context of embedded systems.</p>
+<hr  />
+<p> <em>Note: This README was partially translated from French to English with the assistance of ChatGPT.</em> </p>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
