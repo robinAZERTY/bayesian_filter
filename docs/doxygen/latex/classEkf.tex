@@ -1,0 +1,207 @@
+\hypertarget{classEkf}{}\doxysection{Ekf$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$ Class Template Reference}
+\label{classEkf}\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+
+
+{\ttfamily \#include $<$ekf.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classEkf_af183d5526f13066dc72d4d986c0ca0c9}{Ekf}} ()
+\item 
+\mbox{\hyperlink{classEkf_a65b5fe77e7303998c33011f6c66e2600}{Ekf}} (Vector\+\_\+f3$<$ T $>$ f)
+\item 
+\mbox{\hyperlink{classEkf_aa88f3705f943399727dbc61461802cbc}{$\sim$\+Ekf}} ()
+\item 
+void \mbox{\hyperlink{classEkf_a21fc17b1e939e3bc67d983acc14a77d9}{set\+Prediction\+Function}} (Vector\+\_\+f3$<$ T $>$ f)
+\item 
+void \mbox{\hyperlink{classEkf_a545e6b4d5240291500ab5731ccf3cc1d}{set\+Jacobian\+Function\+\_\+\+Fx}} (Matrix\+\_\+f3$<$ T $>$ Fx)
+\item 
+void \mbox{\hyperlink{classEkf_a4d66dbca0d5f520ed36d4a0517de2da1}{set\+Jacobian\+Function\+\_\+\+Fu}} (Matrix\+\_\+f3$<$ T $>$ Fu)
+\item 
+void \mbox{\hyperlink{classEkf_acf1a1efc561b7728174982f16b9740e3}{set\+Measurement\+Function}} (Vector\+\_\+f2$<$ T $>$ h, size\+\_\+t z\+\_\+dim, size\+\_\+t z\+\_\+idx=0)
+\item 
+void \mbox{\hyperlink{classEkf_a487bfa60ab423109b9a15be4133d5a51}{set\+Jacobian\+Function\+\_\+H}} (Matrix\+\_\+f2$<$ T $>$ H, size\+\_\+t z\+\_\+idx=0)
+\item 
+void \mbox{\hyperlink{classEkf_a7dfb45f6be5be601b2af253db7c3d8bb}{predict}} ()
+\item 
+void \mbox{\hyperlink{classEkf_a88b5346b0af888af2424083b295b0453}{update}} (const Vector$<$ T $>$ \&Z, const sym\+Matrix$<$ T $>$ \&R, const size\+\_\+t z\+\_\+idx=0)
+\item 
+float \mbox{\hyperlink{classEkf_a254a497a5c7134e01d6ff28afeb7f4f6}{get\+Mahalanobis\+Distance}} (const size\+\_\+t z\+\_\+idx=0) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Vector$<$ T $>$ \mbox{\hyperlink{classEkf_a5a3895ec5ad2964afa160f2ba516bfba}{X}} = Vector$<$T$>$(x\+\_\+dim)
+\item 
+Vector$<$ T $>$ \mbox{\hyperlink{classEkf_a140b16c6e369142ffe7933b9a0f3e53c}{dx}} = Vector$<$T$>$(x\+\_\+dim)
+\item 
+sym\+Matrix$<$ T $>$ \mbox{\hyperlink{classEkf_a40cba21a5e6937f3b54daa7d55c047d6}{P}} = sym\+Matrix$<$T$>$(x\+\_\+dim, x\+\_\+dim)
+\item 
+Vector$<$ T $>$ \mbox{\hyperlink{classEkf_a2ae73e0c4ca1fea2df4ecdc03c0573e9}{U}} = Vector$<$T$>$(u\+\_\+dim)
+\item 
+Vector$<$ T $>$ \mbox{\hyperlink{classEkf_a3ea43dc3b7f0f92a45537f2b215821c5}{du}} = Vector$<$T$>$(u\+\_\+dim)
+\item 
+sym\+Matrix$<$ T $>$ \mbox{\hyperlink{classEkf_afe26209d15363d02eb64e8037be53bd2}{Cov\+\_\+U}} = sym\+Matrix$<$T$>$(u\+\_\+dim)
+\item 
+Vector$<$ T $>$ \mbox{\hyperlink{classEkf_adfcea4e63e3ad4a0948ed91971318c6b}{C}} = Vector$<$T$>$(c\+\_\+dim)
+\item 
+Vector$<$ T $>$ \mbox{\hyperlink{classEkf_ac0d66ebe5d08951c479cf81082160aef}{dc}} = Vector$<$T$>$(c\+\_\+dim)
+\item 
+Vector$<$ bool $>$ \mbox{\hyperlink{classEkf_a93d391350192b79e5eadb65a7a38f12a}{update\+Mahalanobis}} = Vector$<$bool$>$(z\+\_\+num)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classEkf_af183d5526f13066dc72d4d986c0ca0c9}\label{classEkf_af183d5526f13066dc72d4d986c0ca0c9}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!Ekf@{Ekf}}
+\index{Ekf@{Ekf}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{Ekf()}{Ekf()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim, size\+\_\+t z\+\_\+num, typename T $>$ \\
+\mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::\mbox{\hyperlink{classEkf}{Ekf}}}
+
+\mbox{\Hypertarget{classEkf_a65b5fe77e7303998c33011f6c66e2600}\label{classEkf_a65b5fe77e7303998c33011f6c66e2600}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!Ekf@{Ekf}}
+\index{Ekf@{Ekf}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{Ekf()}{Ekf()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+\mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::\mbox{\hyperlink{classEkf}{Ekf}} (\begin{DoxyParamCaption}\item[{Vector\+\_\+f3$<$ T $>$}]{f }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classEkf_aa88f3705f943399727dbc61461802cbc}\label{classEkf_aa88f3705f943399727dbc61461802cbc}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!````~Ekf@{$\sim$Ekf}}
+\index{````~Ekf@{$\sim$Ekf}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$Ekf()}{~Ekf()}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+\mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::$\sim$\mbox{\hyperlink{classEkf}{Ekf}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classEkf_a254a497a5c7134e01d6ff28afeb7f4f6}\label{classEkf_a254a497a5c7134e01d6ff28afeb7f4f6}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!getMahalanobisDistance@{getMahalanobisDistance}}
+\index{getMahalanobisDistance@{getMahalanobisDistance}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{getMahalanobisDistance()}{getMahalanobisDistance()}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+float \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::get\+Mahalanobis\+Distance (\begin{DoxyParamCaption}\item[{const size\+\_\+t}]{z\+\_\+idx = {\ttfamily 0} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classEkf_a7dfb45f6be5be601b2af253db7c3d8bb}\label{classEkf_a7dfb45f6be5be601b2af253db7c3d8bb}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!predict@{predict}}
+\index{predict@{predict}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{predict()}{predict()}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim, size\+\_\+t z\+\_\+num, typename T $>$ \\
+void \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::predict\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classEkf_a4d66dbca0d5f520ed36d4a0517de2da1}\label{classEkf_a4d66dbca0d5f520ed36d4a0517de2da1}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!setJacobianFunction\_Fu@{setJacobianFunction\_Fu}}
+\index{setJacobianFunction\_Fu@{setJacobianFunction\_Fu}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{setJacobianFunction\_Fu()}{setJacobianFunction\_Fu()}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+void \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::set\+Jacobian\+Function\+\_\+\+Fu (\begin{DoxyParamCaption}\item[{Matrix\+\_\+f3$<$ T $>$}]{Fu }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classEkf_a545e6b4d5240291500ab5731ccf3cc1d}\label{classEkf_a545e6b4d5240291500ab5731ccf3cc1d}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!setJacobianFunction\_Fx@{setJacobianFunction\_Fx}}
+\index{setJacobianFunction\_Fx@{setJacobianFunction\_Fx}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{setJacobianFunction\_Fx()}{setJacobianFunction\_Fx()}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+void \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::set\+Jacobian\+Function\+\_\+\+Fx (\begin{DoxyParamCaption}\item[{Matrix\+\_\+f3$<$ T $>$}]{Fx }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classEkf_a487bfa60ab423109b9a15be4133d5a51}\label{classEkf_a487bfa60ab423109b9a15be4133d5a51}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!setJacobianFunction\_H@{setJacobianFunction\_H}}
+\index{setJacobianFunction\_H@{setJacobianFunction\_H}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{setJacobianFunction\_H()}{setJacobianFunction\_H()}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+void \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::set\+Jacobian\+Function\+\_\+H (\begin{DoxyParamCaption}\item[{Matrix\+\_\+f2$<$ T $>$}]{H,  }\item[{size\+\_\+t}]{z\+\_\+idx = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classEkf_acf1a1efc561b7728174982f16b9740e3}\label{classEkf_acf1a1efc561b7728174982f16b9740e3}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!setMeasurementFunction@{setMeasurementFunction}}
+\index{setMeasurementFunction@{setMeasurementFunction}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{setMeasurementFunction()}{setMeasurementFunction()}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim, size\+\_\+t z\+\_\+num, typename T $>$ \\
+void \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::set\+Measurement\+Function (\begin{DoxyParamCaption}\item[{Vector\+\_\+f2$<$ T $>$}]{h,  }\item[{size\+\_\+t}]{z\+\_\+dim,  }\item[{size\+\_\+t}]{z\+\_\+idx = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classEkf_a21fc17b1e939e3bc67d983acc14a77d9}\label{classEkf_a21fc17b1e939e3bc67d983acc14a77d9}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!setPredictionFunction@{setPredictionFunction}}
+\index{setPredictionFunction@{setPredictionFunction}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{setPredictionFunction()}{setPredictionFunction()}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+void \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::set\+Prediction\+Function (\begin{DoxyParamCaption}\item[{Vector\+\_\+f3$<$ T $>$}]{f }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classEkf_a88b5346b0af888af2424083b295b0453}\label{classEkf_a88b5346b0af888af2424083b295b0453}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!update@{update}}
+\index{update@{update}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim, size\+\_\+t z\+\_\+num, typename T $>$ \\
+void \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::update (\begin{DoxyParamCaption}\item[{const Vector$<$ T $>$ \&}]{Z,  }\item[{const sym\+Matrix$<$ T $>$ \&}]{R,  }\item[{const size\+\_\+t}]{z\+\_\+idx = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classEkf_adfcea4e63e3ad4a0948ed91971318c6b}\label{classEkf_adfcea4e63e3ad4a0948ed91971318c6b}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!C@{C}}
+\index{C@{C}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{C}{C}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+Vector$<$T$>$ \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::C = Vector$<$T$>$(c\+\_\+dim)}
+
+\mbox{\Hypertarget{classEkf_afe26209d15363d02eb64e8037be53bd2}\label{classEkf_afe26209d15363d02eb64e8037be53bd2}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!Cov\_U@{Cov\_U}}
+\index{Cov\_U@{Cov\_U}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{Cov\_U}{Cov\_U}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+sym\+Matrix$<$T$>$ \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::Cov\+\_\+U = sym\+Matrix$<$T$>$(u\+\_\+dim)}
+
+\mbox{\Hypertarget{classEkf_ac0d66ebe5d08951c479cf81082160aef}\label{classEkf_ac0d66ebe5d08951c479cf81082160aef}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!dc@{dc}}
+\index{dc@{dc}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{dc}{dc}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+Vector$<$T$>$ \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::dc = Vector$<$T$>$(c\+\_\+dim)}
+
+\mbox{\Hypertarget{classEkf_a3ea43dc3b7f0f92a45537f2b215821c5}\label{classEkf_a3ea43dc3b7f0f92a45537f2b215821c5}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!du@{du}}
+\index{du@{du}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{du}{du}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+Vector$<$T$>$ \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::du = Vector$<$T$>$(u\+\_\+dim)}
+
+\mbox{\Hypertarget{classEkf_a140b16c6e369142ffe7933b9a0f3e53c}\label{classEkf_a140b16c6e369142ffe7933b9a0f3e53c}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!dx@{dx}}
+\index{dx@{dx}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{dx}{dx}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+Vector$<$T$>$ \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::dx = Vector$<$T$>$(x\+\_\+dim)}
+
+\mbox{\Hypertarget{classEkf_a40cba21a5e6937f3b54daa7d55c047d6}\label{classEkf_a40cba21a5e6937f3b54daa7d55c047d6}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!P@{P}}
+\index{P@{P}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{P}{P}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+sym\+Matrix$<$T$>$ \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::P = sym\+Matrix$<$T$>$(x\+\_\+dim, x\+\_\+dim)}
+
+\mbox{\Hypertarget{classEkf_a2ae73e0c4ca1fea2df4ecdc03c0573e9}\label{classEkf_a2ae73e0c4ca1fea2df4ecdc03c0573e9}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!U@{U}}
+\index{U@{U}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{U}{U}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+Vector$<$T$>$ \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::U = Vector$<$T$>$(u\+\_\+dim)}
+
+\mbox{\Hypertarget{classEkf_a93d391350192b79e5eadb65a7a38f12a}\label{classEkf_a93d391350192b79e5eadb65a7a38f12a}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!updateMahalanobis@{updateMahalanobis}}
+\index{updateMahalanobis@{updateMahalanobis}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{updateMahalanobis}{updateMahalanobis}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+Vector$<$bool$>$ \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::update\+Mahalanobis = Vector$<$bool$>$(z\+\_\+num)}
+
+\mbox{\Hypertarget{classEkf_a5a3895ec5ad2964afa160f2ba516bfba}\label{classEkf_a5a3895ec5ad2964afa160f2ba516bfba}} 
+\index{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}!X@{X}}
+\index{X@{X}!Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$@{Ekf$<$ x\_dim, u\_dim, c\_dim, z\_num, T $>$}}
+\doxysubsubsection{\texorpdfstring{X}{X}}
+{\footnotesize\ttfamily template$<$size\+\_\+t x\+\_\+dim, size\+\_\+t u\+\_\+dim, size\+\_\+t c\+\_\+dim = 1, size\+\_\+t z\+\_\+num = 1, typename T  = float$>$ \\
+Vector$<$T$>$ \mbox{\hyperlink{classEkf}{Ekf}}$<$ x\+\_\+dim, u\+\_\+dim, c\+\_\+dim, z\+\_\+num, T $>$\+::X = Vector$<$T$>$(x\+\_\+dim)}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{ekf_8hpp}{ekf.\+hpp}}\item 
+src/\mbox{\hyperlink{ekf_8cpp}{ekf.\+cpp}}\end{DoxyCompactItemize}
