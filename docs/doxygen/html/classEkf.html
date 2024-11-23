@@ -70,6 +70,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>A generic implementation of an Extended Kalman Filter (EKF).  
+ <a href="classEkf.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="ekf_8hpp_source.html">ekf.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -118,7 +121,32 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a93d391350192b79e5eadb65a7a38f12a"><td class="memItemLeft" align="right" valign="top">Vector&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEkf.html#a93d391350192b79e5eadb65a7a38f12a">updateMahalanobis</a> = Vector&lt;bool&gt;(z_num)</td></tr>
 <tr class="separator:a93d391350192b79e5eadb65a7a38f12a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, typename T = float&gt;<br />
+class Ekf&lt; x_dim, u_dim, c_dim, z_num, T &gt;</h3>
+
+<p>A generic implementation of an Extended Kalman Filter (EKF). </p>
+<p>This class provides the core EKF functionality, including state prediction and update steps for nonlinear systems. It supports dynamic system models and allows for numerical differentiation of Jacobians for both state transition and measurement functions.</p>
+<p>You must provide several key functions and data to ensure the filter works properly:</p>
+<ul>
+<li><b>State Transition Function</b> (<code>f</code>): A function that models the evolution of the state vector over time, used for the prediction step.</li>
+<li><b>Measurement Function</b> (<code>h</code>): A function that models the measurement process, mapping the state vector to the measurement space.</li>
+<li><b>Initial State and Covariance</b> (<code>X</code> and <code>P</code>): The user must initialize the state vector <code>X</code> and the state covariance matrix <code>P</code> with reasonable values for the system.</li>
+<li><b>Control Inputs</b> (<code>U</code>): If the system involves control inputs, the user must provide them during the prediction step.</li>
+<li><b>Measurement Data</b> (<code>Z</code> and <code>R</code>): During the update step, the user must provide the measurement vector <code>Z</code> and the measurement noise covariance <code>R</code>.</li>
+</ul>
+<p>The EKF will then handle the state prediction, measurement update, and state covariance estimation.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">x_dim</td><td>The dimension of the state vector. </td></tr>
+    <tr><td class="paramname">u_dim</td><td>The dimension of the control input vector. </td></tr>
+    <tr><td class="paramname">c_dim</td><td>The dimension of the system parameters (default is 1). </td></tr>
+    <tr><td class="paramname">z_num</td><td>The number of measurement types (default is 1). </td></tr>
+    <tr><td class="paramname">T</td><td>The data type used for calculations (default is float). </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af183d5526f13066dc72d4d986c0ca0c9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af183d5526f13066dc72d4d986c0ca0c9">&#9670;&nbsp;</a></span>Ekf() <span class="overload">[1/2]</span></h2>
 
@@ -132,6 +160,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Default constructor </p>
 
 </div>
 </div>
@@ -160,6 +189,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Constructor with a state transition function </p>
 
 </div>
 </div>
@@ -187,6 +217,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Destructor </p>
 
 </div>
 </div>
@@ -216,6 +247,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get the Mahalanobis distance for a specific measurement type </p>
 
 </div>
 </div>
@@ -240,6 +272,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Perform the prediction step of the EKF </p>
 
 </div>
 </div>
@@ -268,6 +301,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Set the Jacobian for control input transition </p>
 
 </div>
 </div>
@@ -296,6 +330,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Set the Jacobian for state transition </p>
 
 </div>
 </div>
@@ -334,6 +369,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Set the Jacobian for the measurement function </p>
 
 </div>
 </div>
@@ -370,6 +406,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Set the measurement function for a specific measurement type </p>
 
 </div>
 </div>
@@ -398,6 +435,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Set the state prediction function </p>
 
 </div>
 </div>
@@ -442,6 +480,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Perform the update step of the EKF with a measurement vector </p>
 
 </div>
 </div>
@@ -459,6 +498,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
         </tr>
       </table>
 </div><div class="memdoc">
+<p>System parameters vector </p>
 
 </div>
 </div>
@@ -475,6 +515,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Process noise covariance matrix </p>
 
 </div>
 </div>
@@ -491,6 +532,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Small system parameters epsilon for numerical differentiation </p>
 
 </div>
 </div>
@@ -507,6 +549,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Small control input epsilon for numerical differentiation </p>
 
 </div>
 </div>
@@ -523,6 +566,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Small state epsilon for numerical differentiation </p>
 
 </div>
 </div>
@@ -539,6 +583,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
         </tr>
       </table>
 </div><div class="memdoc">
+<p>State covariance matrix </p>
 
 </div>
 </div>
@@ -555,6 +600,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Control input vector </p>
 
 </div>
 </div>
@@ -571,6 +617,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Flags indicating whether to update the Mahalanobis distance for each measurement type </p>
 
 </div>
 </div>
@@ -587,6 +634,7 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Current state vector </p>
 
 </div>
 </div>
