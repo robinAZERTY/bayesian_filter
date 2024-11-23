@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['dc_2',['dc',['../classEkf.html#ac0d66ebe5d08951c479cf81082160aef',1,'Ekf']]],
-  ['du_3',['du',['../classEkf.html#a3ea43dc3b7f0f92a45537f2b215821c5',1,'Ekf']]],
-  ['dx_4',['dx',['../classEkf.html#a140b16c6e369142ffe7933b9a0f3e53c',1,'Ekf']]]
+  ['c_1',['C',['../classEkf.html#adfcea4e63e3ad4a0948ed91971318c6b',1,'Ekf']]],
+  ['cov_5fu_2',['Cov_U',['../classEkf.html#afe26209d15363d02eb64e8037be53bd2',1,'Ekf']]]
 ];
