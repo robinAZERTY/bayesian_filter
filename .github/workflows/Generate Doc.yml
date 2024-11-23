@@ -3,8 +3,12 @@ name: Generate Doxygen Documentation
 on:
   push:
     branches:
-      - release  # Remplacez par la branche principale de votre projet si ce n'est pas `main`
-
+      - main  # Déclenche le workflow sur la branche principale
+    paths:
+      - 'src/**'        # Déclenche le workflow si un fichier dans src/ est modifié
+      - 'include/**'     # Déclenche le workflow si un fichier dans include/ est modifié
+      - 'README.md'      # Si tu veux aussi inclure le README pour la page principale
+      - '.github/**'     # Inclure les workflows ou autres fichiers de configuration
 jobs:
   generate-docs:
     name: Generate Doxygen Documentation
