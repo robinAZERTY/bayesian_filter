@@ -29,6 +29,7 @@ jobs:
         sed -i 's/^INPUT.*/INPUT = include src/' Doxyfile
         sed -i 's/^RECURSIVE.*/RECURSIVE = YES/' Doxyfile
         sed -i 's/^# USE_MDFILE_AS_MAINPAGE.*/USE_MDFILE_AS_MAINPAGE = README.md/' Doxyfile
+        sed -i 's/^GENERATE_LATEX.*/GENERATE_LATEX = NO/' Doxyfile
         doxygen Doxyfile
 
     # 4. Commit and push the changes
