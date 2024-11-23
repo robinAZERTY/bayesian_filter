@@ -112,10 +112,8 @@ class Ekf
     /** Measurement Jacobian * State covariance for each measurement type */
     Matrix<T> H_P[z_num];
     
-    /** Numerical differentiation of the state transition Jacobian */
     inline void finite_diff_Fx(const size_t i);
     
-    /** Numerical differentiation of the control input transition Jacobian */
     inline void finite_diff_Fu(const size_t i);
     
     /** Compute Jacobian for state transition using numerical differentiation */
@@ -124,13 +122,11 @@ class Ekf
     /** Compute Jacobian for control input transition using numerical differentiation */
     void finite_diff_Fu() { for (size_t i = 0; i < u_dim; i++) finite_diff_Fu(i); };
     
-    /** Numerical differentiation of the measurement Jacobian for a specific measurement */
     void finite_diff_H(const size_t z_idx, const size_t i);
     
     /** Compute Jacobian for measurements using numerical differentiation */
     void finite_diff_H(const size_t z_idx) { for (size_t i = 0; i < x_dim; i++) finite_diff_H(z_idx, i); };
     
-    /** Compute the innovation covariance matrix for a specific measurement */
     void compute_S(const size_t z_idx);
 
     /** Flag indicating whether the filter is initialized */
@@ -164,7 +160,6 @@ public:
     /** Flags indicating whether to update the Mahalanobis distance for each measurement type */
     Vector<bool> updateMahalanobis = Vector<bool>(z_num);
     
-    /** Default constructor */
     Ekf();
     
     /** Constructor with a state transition function */
@@ -182,16 +177,12 @@ public:
     /** Set the Jacobian for control input transition */
     void setJacobianFunction_Fu(Matrix_f3<T> Fu) { this->Fu = Fu; }
 
-    /** Set the measurement function for a specific measurement type */
     void setMeasurementFunction(Vector_f2<T> h, size_t z_dim, size_t z_idx = 0);
     
     /** Set the Jacobian for the measurement function */
     void setJacobianFunction_H(Matrix_f2<T> H, size_t z_idx = 0) { this->H[z_idx] = H; }
 
-    /** Perform the prediction step of the EKF */
     inline void predict();
-
-    /** Perform the update step of the EKF with a measurement vector */
     inline void update(const Vector<T> &Z, const symMatrix<T> &R, const size_t z_idx = 0);
 
     /** Get the Mahalanobis distance for a specific measurement type */
