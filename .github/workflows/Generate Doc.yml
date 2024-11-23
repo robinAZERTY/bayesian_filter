@@ -1,0 +1,43 @@
+name: Generate Doxygen Documentation
+
+on:
+  push:
+    branches:
+      - release  # Remplacez par la branche principale de votre projet si ce n'est pas `main`
+
+jobs:
+  generate-docs:
+    name: Generate Doxygen Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. Set up Doxygen
+    - name: Install Doxygen
+      run: sudo apt-get install -y doxygen
+
+    # 3. Generate the Doxygen configuration and documentation
+    - name: Generate Doxygen Documentation
+      run: |
+        mkdir -p docs/doxygen
+        doxygen -g  # Generate a temporary Doxyfile
+        sed -i 's/^OUTPUT_DIRECTORY.*/OUTPUT_DIRECTORY = docs\/doxygen/' Doxyfile
+        sed -i 's/^EXTRACT_ALL.*/EXTRACT_ALL = YES/' Doxyfile
+        sed -i 's/^INPUT.*/INPUT = include src/' Doxyfile
+        sed -i 's/^RECURSIVE.*/RECURSIVE = YES/' Doxyfile
+        doxygen Doxyfile
+
+    # 4. Commit and push the changes
+    - name: Commit and Push changes
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "actions@github.com"
+        git add docs/doxygen/*
+        git commit -m "Update Doxygen documentation"
+        git pull
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
