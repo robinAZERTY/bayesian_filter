@@ -1,7 +1,7 @@
 name: Generate Doxygen Documentation
 
 on:
-  push:
+  pull_request:
     branches:
       - release  # Déclenche le workflow sur la branche principale
     paths:

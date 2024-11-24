@@ -82,17 +82,14 @@ class Ekf
     
     /** Measurement residuals for each measurement type */
     Vector<T> y[z_num];
-    
-    /** Squared Mahalanobis distance for each measurement type */
-    float ds[z_num] = {1};
-    
-    /** Filter forgetting factor (used in recursive filtering) */
-    float alpha = 1 - 5.f / (5 + 1);
-    
+        
     /** Jacobian values for measurement functions */
     Matrix<T> H_val[z_num];
+
+    /** partial computation of innovation covariance (without R added) */
+    symMatrix<T> pre_S[z_num];
     
-    /** Inverse innovation covariance */
+    /** innovation precision */
     ldl_matrix<T> S_inv[z_num];
     
     /** Predicted measurement for each measurement type */
@@ -182,10 +179,29 @@ public:
     void setJacobianFunction_H(Matrix_f2<T> H, size_t z_idx = 0) { this->H[z_idx] = H; }
 
     inline void predict();
+
+    inline void compute_H_P(const size_t z_idx = 0);
+    inline void computeResidualPrecision(const symMatrix<T> &R, const size_t z_idx = 0);
+    inline void computeResidual(const Vector<T> &Z, const size_t z_idx = 0);
+    inline void updateStateCovariance(const size_t z_idx = 0);
+
+    
+    /** 
+     * @brief Compute the Mahalanobis distance for a specific measurement type relative to last update of residual and residual precision.
+     * 
+     * Should be called after the "computeResidualPrecision" function
+     * Can be used to monitor the likelihood of the given measurement. 
+     * It is useful for detecting outliers or resolving identification issues (when you receive a measurement and you don't know witch measurement type it is).
+     * If everything is perfectly modelled, the average Mahalanobis distance should be 1 (after averaging over a long period).
+     * 
+     * @param z_idx The index of the measurement type.
+     * @return The Mahalanobis distance.
+     */
+    inline T mahalanobisDistance(const size_t z_idx = 0) { return y[z_idx].dot(*(S_inv[z_idx] * y[z_idx]).release());}
+
+
     inline void update(const Vector<T> &Z, const symMatrix<T> &R, const size_t z_idx = 0);
 
-    /** Get the Mahalanobis distance for a specific measurement type */
-    inline float getMahalanobisDistance(const size_t z_idx = 0) const { return ds[z_idx]; }
 };
 
 
