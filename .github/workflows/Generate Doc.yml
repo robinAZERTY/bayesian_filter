@@ -1,7 +1,14 @@
 name: Generate Doxygen Documentation
-
 on:
   pull_request:
+    branches:
+      - release  # Déclenche le workflow sur la branche principale
+    paths:
+      - 'src/**'        # Déclenche le workflow si un fichier dans src/ est modifié
+      - 'include/**'     # Déclenche le workflow si un fichier dans include/ est modifié
+      - 'README.md'      # Si tu veux aussi inclure le README pour la page principale
+      - '.github/**'     # Inclure les workflows ou autres fichiers de configuration
+  push:
     branches:
       - release  # Déclenche le workflow sur la branche principale
     paths:
@@ -41,9 +48,11 @@ jobs:
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "actions@github.com"
+        git fetch origin release  # Récupérer les dernières modifications de la branche 'release'
+        git checkout release      # Passer explicitement à la branche 'release'
         git add docs/doxygen/*
         git commit -m "Update Doxygen documentation"
-        git pull
-        git push
+        git pull origin release --rebase  # S'assurer que la branche locale est à jour
+        git push origin release           # Pousser les changements vers la branche 'release'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
