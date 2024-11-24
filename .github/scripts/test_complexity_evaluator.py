@@ -125,7 +125,7 @@ def plot(data_i_j_k, df, lin1, lin2, lin3, poly, poly2, show=True):
         plt.show()
     
     #export this plot in lib/ESP32AlgebraFilters/docs/ekf_complexity_analysis
-    fig.savefig('docs/efficiency'+filter_type+'_complexity_analysis.png', dpi=200)
+    fig.savefig('docs/efficiency/'+filter_type+'_complexity_analysis.png', dpi=200)
 
 
 def analyse(results):
@@ -189,10 +189,10 @@ def coefficients2str(score, cst, coefficients,variables,max_degree, digits=2):
 ekf_complexity_analysis = {}
 def read_ekf_complexity_analysis():
     #read current release in lib/ESP32AlgebraFilters/library.json
-    with open('lib/ESP32AlgebraFilters/library.json', 'r') as file:
+    with open('library.json', 'r') as file:
         library = json.load(file)
     global ekf_complexity_analysis
-    with open('lib/ESP32AlgebraFilters/docs/ekf_complexity_analysis.json', 'r') as file:
+    with open('docs/efficiency/ekf_complexity_analysis.json', 'r') as file:
         ekf_complexity_analysis = json.load(file)
         
     #update the release with the new complexity analysis
@@ -280,7 +280,7 @@ def compare_efficiency(max_regression_relative_error=0.015):
     return better, regret
     
 def write_ekf_complexity_analysis():
-    with open('lib/ESP32AlgebraFilters/docs/'+filter_type+'_complexity_analysis.json', 'w') as file:
+    with open('docs/efficiency/'+filter_type+'_complexity_analysis.json', 'w') as file:
         json.dump(ekf_complexity_analysis, file, indent=4)
     
 
@@ -291,9 +291,9 @@ if __name__ == "__main__":
     ORANGE = "\033[93m"
     RESET = "\033[0m"
 
-    print(f"{ORANGE}Make sure you flashed the ESP32 with the 'B_efficiency/{filter_type}/test_complexity/complexity.cpp' sketch, then reset the ESP32 if the test does not start by itself.{RESET}")
+    print(f"{ORANGE}Make sure you flashed the ESP32 with the 'B_efficiency/{filter_type}/test_complexity/main.cpp' sketch, then reset the ESP32 if the test does not start by itself.{RESET}")
     print("You can upload the sketch by running the following command in the terminal:")
-    print(f"{BLUE}pio test -e esp32dev -f B_efficiency/{filter_type}/test_complexity/complexity.cpp{RESET}")
+    print(f"{BLUE}pio test -e esp32dev -f B_efficiency/{filter_type}/test_complexity/main.cpp{RESET}")
     ports = serial.tools.list_ports.comports()
     ports = [port for port in ports if "Bluetooth" not in port.description]
     if len(ports) == 1:
@@ -306,6 +306,7 @@ if __name__ == "__main__":
         port_index = int(input("port index: "))
         ser = serial.Serial(ports[port_index].device, 115200)
     
+    print("if the test does not start by itself, press the reset button on the ESP32")
     wait_for_esp32(ser)
     print(f"{GREEN}Connexion initialized{RESET}")
     listen_header(ser)
@@ -316,5 +317,8 @@ if __name__ == "__main__":
     plot(data_i_j_k, df, lin1, lin2, lin3, poly, poly2, show=False)
     read_ekf_complexity_analysis()
     compute_ekf_complexity_analysis(X_poly1, X_poly2, X_poly3, y1, y2, y3, lin1, lin2, lin3)
-    compare_efficiency()
+    if "best release" not in ekf_complexity_analysis:
+        ekf_complexity_analysis["best release"] = ekf_complexity_analysis["current release"]
+    else :
+        compare_efficiency()
     write_ekf_complexity_analysis()

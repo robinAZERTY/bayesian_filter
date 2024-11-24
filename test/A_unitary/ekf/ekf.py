@@ -59,7 +59,7 @@ class Ekf:
         y = z - h_pred
         
         if H is None:
-            H = self.jacobian(h, self.x, h_pred)
+            H = self.jacobian(lambda x: h(x,self.c), self.x, h_pred)
         
         if S is None:      
             S = H @ self.P @ H.T + R

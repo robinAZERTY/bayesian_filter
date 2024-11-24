@@ -175,8 +175,15 @@ inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::predict()
  * 
  * This function updates the state vector `X` and the state covariance matrix `P` based on the new measurement `Z`
  * and the measurement noise covariance matrix `R`. The Kalman gain is also computed and used to adjust the state.
- * 
  * Throws an exception if the measurement function is not set or if there is a dimension mismatch.
+ * This function can be split into multiple parts for better readability and modularity as follows:
+ * @code
+ * compute_H_P(z_idx);
+ * computeResidualPrecision(R, z_idx);
+ * computeResidual(Z, z_idx);
+ * updateStateCovariance(z_idx);
+ * @endcode
+ * Before calling @code updateStateCovariance @endcode, you can check the Mahalanobis distance using @ref mahalanobisDistance.
  * 
  * @param Z The new measurement vector.
  * @param R The measurement noise covariance matrix.
@@ -185,10 +192,24 @@ inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::predict()
 template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
 inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::update(const Vector<T> &Z, const symMatrix<T> &R, const size_t z_idx)
 {
+    compute_H_P(z_idx);
+    computeResidualPrecision(R, z_idx);
+    computeResidual(Z, z_idx);
+    updateStateCovariance(z_idx);
+}
+
+/**
+ * @brief First part of the update function, computes the measurement prediction and the measurement Jacobian.
+ * 
+ * Additionally, it computes the common expression `H*P` which is used to reduce the number of matrix multiplications during the update step.
+ * 
+ * @param z_idx The index of the measurement type.
+ */
+template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
+void Ekf<x_dim, u_dim, c_dim, z_num, T>::compute_H_P(const size_t z_idx)
+{
     if (h[z_idx] == nullptr)
         throw "Ekf::update() measurement function not set";
-    if (z_dim[z_idx] != Z.size())
-        throw "Ekf::update() measurement dimension mismatch";
 
     h_val[z_idx] = h[z_idx](X, C); //  measurement prediction
 
@@ -199,21 +220,58 @@ inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::update(const Vector<T> &Z, const
         H_val[z_idx] = H[z_idx](X, C);
 
     H_P[z_idx].holdMul(H_val[z_idx].T, P); // common expression (calculus factorisation)
-    y[z_idx].holdSub(Z, h_val[z_idx]);     // residual
-    
-    // residual precision
-    S_inv[z_idx].holdMul(H_P[z_idx], H_val[z_idx]);
-    S_inv[z_idx] += R;
-    S_inv[z_idx].holdInv(S_inv[z_idx], false);
+    pre_S[z_idx].holdMul(H_P[z_idx], H_val[z_idx]); // pre computation of residual covariance (R not added yet)
+}
 
+
+/**
+ * @brief Second part of the update function, computes the residual and the residual precision.
+ * 
+ * This function is a part of the update step.
+ * 
+ * @param Z The new measurement vector.
+ * @param R The measurement noise covariance matrix.
+ * @param z_idx The index of the measurement type.
+ */
+template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
+inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::computeResidualPrecision(const symMatrix<T> &R, const size_t z_idx)
+{    
+    // residual precision
+    S_inv[z_idx].holdAdd(pre_S[z_idx], R);
+    S_inv[z_idx].holdInv(S_inv[z_idx], false);
+}
+
+/**
+ * @brief Third part of the update function, computes the residual and updates the state and covariance.
+ * 
+ *  This function compute the difference between the measurement and the predicted measurement
+ * 
+ * @param Z The new measurement vector.
+ * @param z_idx The index of the measurement type.
+ */
+template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
+inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::computeResidual(const Vector<T> &Z, const size_t z_idx)
+{
+    if (z_dim[z_idx] != Z.size())
+        throw "Ekf::update() measurement dimension mismatch";
+
+    y[z_idx].holdSub(Z, h_val[z_idx]);
+}
+
+
+/**
+ * @brief Final part of the update function, computes the state and covariance.
+ * 
+ * This function compute the Kalman gain and updates the state and covariance based on the measurement residual and the residual precision.
+ * 
+ * @param z_idx The index of the measurement type.
+ * @param updateMahalanobis Flag indicating whether to update the Mahalanobis distance.
+ */
+
+template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>
+inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::updateStateCovariance(const size_t z_idx)
+{
     K.holdMul(H_P[z_idx].T, S_inv[z_idx]); // Kalman gains
     X.addMul(K, y[z_idx]);             // update the state
     P.subMul(K, H_P[z_idx]);           // update the state covariance
-
-    if (!updateMahalanobis[z_idx])
-        return;
-        
-    T dd = y[z_idx].dot(*(S_inv[z_idx] * y[z_idx]).release()); // squared Mahalanobis distance
-    dd /= z_dim[z_idx];                                    // average it over dimensions (should be around 1)
-    ds[z_idx] += alpha * (dd - ds[z_idx]);                 // low pass filter (or exponential moving average)
 }

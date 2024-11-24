@@ -109,12 +109,19 @@ Ekf_X = np.zeros((len(t), 4))
 Ekf_P = np.zeros((len(t), 4, 4))
 Ekf_X[0] = ekf.x.copy()
 Ekf_P[0] = ekf.P.copy()
+Ekf_M0 = np.zeros((len(t), 1))
+Ekf_M1 = np.zeros((len(t), 1))
+Ekf_M0.fill(np.nan)
+Ekf_M1.fill(np.nan)
+
 #simulation du filtre
 for i in range(1, len(t)):
     ekf.predict(f,u[i])
     if not np.isnan(z1[i]):
+        Ekf_M0[i] = ekf.mahalanobis(h1, z1[i], R1)
         ekf.update(h1, z1[i], R1)
     if not np.isnan(z2[i]):
+        Ekf_M1[i] = ekf.mahalanobis(h2, z2[i], R2)
         ekf.update(h2, z2[i], R2)
         
     Ekf_X[i] = ekf.x.copy()
@@ -132,6 +139,8 @@ df = pd.DataFrame({
     'UU1' : u[:,1],
     'ZZ0' : z1,
     'ZZ1' : z2,
+    'MM0' : Ekf_M0[:,0],
+    'MM1' : Ekf_M1[:,0],
     
 })
 # # Conditions d'initialisation du filtre et résultats
@@ -188,6 +197,7 @@ with open(input_file, 'w') as file:
     
 #plot trajectories
 plt.figure()
+plt.subplot(2,1,1)
 plt.plot(true_x[:,0], true_x[:,1], label='True trajectory')
 plt.plot(Ekf_X[:,0], Ekf_X[:,1], label='Estimated trajectory')
 plt.scatter(ekf.c[1], ekf.c[2], label='Beacon 1', color='red')
@@ -196,4 +206,14 @@ plt.legend()
 plt.title('Trajectories')
 plt.xlabel('X')
 plt.ylabel('Y')
+
+# mahalanobis distances
+plt.subplot(2,1,2)
+plt.scatter(t, Ekf_M0, label='Mahalanobis distance to beacon 1')
+plt.scatter(t, Ekf_M1, label='Mahalanobis distance to beacon 2')
+plt.legend()
+plt.title('Mahalanobis distances')
+plt.xlabel('Time')
+plt.ylabel('Mahalanobis distance')
 plt.show()
+
