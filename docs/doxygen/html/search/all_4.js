@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getmahalanobisdistance_10',['getMahalanobisDistance',['../classEkf.html#a254a497a5c7134e01d6ff28afeb7f4f6',1,'Ekf']]]
+  ['mahalanobisdistance_13',['mahalanobisDistance',['../classEkf.html#ab0e6bd7e7ec1ef56db6a70bdc5f2db3e',1,'Ekf']]]
 ];

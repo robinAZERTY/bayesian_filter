@@ -119,99 +119,106 @@ $(function() {
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    Matrix_f2&lt;T&gt; H[z_num] = {<span class="keyword">nullptr</span>};</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    </div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    Vector&lt;T&gt; y[z_num];</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">float</span> ds[z_num] = {1};</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordtype">float</span> alpha = 1 - 5.f / (5 + 1);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    Matrix&lt;T&gt; H_val[z_num];</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    symMatrix&lt;T&gt; pre_S[z_num];</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    Matrix&lt;T&gt; H_val[z_num];</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    ldl_matrix&lt;T&gt; S_inv[z_num];</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    ldl_matrix&lt;T&gt; S_inv[z_num];</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    Vector&lt;T&gt; h_val[z_num];</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    Vector&lt;T&gt; h_val[z_num];</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    Vector&lt;T&gt; prev_X = Vector&lt;T&gt;(x_dim);</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    Vector&lt;T&gt; prev_X = Vector&lt;T&gt;(x_dim);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    Matrix&lt;T&gt; Fx_val_T = Matrix&lt;T&gt;(x_dim, x_dim);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    Matrix&lt;T&gt; Fu_val_T = Matrix&lt;T&gt;(u_dim, x_dim);</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    Matrix&lt;T&gt; Fc_val_T = Matrix&lt;T&gt;(c_dim, x_dim);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    Matrix&lt;T&gt; Fx_val_T = Matrix&lt;T&gt;(x_dim, x_dim);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    Matrix&lt;T&gt; Fu_val_T = Matrix&lt;T&gt;(u_dim, x_dim);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    Matrix&lt;T&gt; Fc_val_T = Matrix&lt;T&gt;(c_dim, x_dim);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    rowMajorMatrix&lt;T&gt; K;</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    rowMajorMatrix&lt;T&gt; K;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    Matrix&lt;T&gt; H_P[z_num];</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    </div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    Matrix&lt;T&gt; H_P[z_num];</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> finite_diff_Fx(<span class="keyword">const</span> <span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> finite_diff_Fu(<span class="keyword">const</span> <span class="keywordtype">size_t</span> i);</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> finite_diff_Fx(<span class="keyword">const</span> <span class="keywordtype">size_t</span> i);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> finite_diff_Fu(<span class="keyword">const</span> <span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">void</span> finite_diff_Fx() { <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; x_dim; i++) finite_diff_Fx(i); };</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">void</span> finite_diff_Fx() { <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; x_dim; i++) finite_diff_Fx(i); };</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">void</span> finite_diff_Fu() { <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; u_dim; i++) finite_diff_Fu(i); };</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">void</span> finite_diff_Fu() { <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; u_dim; i++) finite_diff_Fu(i); };</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keywordtype">void</span> finite_diff_H(<span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx, <span class="keyword">const</span> <span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordtype">void</span> finite_diff_H(<span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx, <span class="keyword">const</span> <span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keywordtype">void</span> finite_diff_H(<span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx) { <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; x_dim; i++) finite_diff_H(z_idx, i); };</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keywordtype">void</span> finite_diff_H(<span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx) { <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; x_dim; i++) finite_diff_H(z_idx, i); };</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordtype">void</span> compute_S(<span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keywordtype">void</span> compute_S(<span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordtype">bool</span> initted = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordtype">bool</span> initted = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00136"></a><span class="lineno"><a class="line" href="classEkf.html#a5a3895ec5ad2964afa160f2ba516bfba">  136</a></span>&#160;    Vector&lt;T&gt; X = Vector&lt;T&gt;(x_dim);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00133"></a><span class="lineno"><a class="line" href="classEkf.html#a5a3895ec5ad2964afa160f2ba516bfba">  133</a></span>&#160;    Vector&lt;T&gt; X = Vector&lt;T&gt;(x_dim);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    </div>
+<div class="line"><a name="l00136"></a><span class="lineno"><a class="line" href="classEkf.html#a140b16c6e369142ffe7933b9a0f3e53c">  136</a></span>&#160;    Vector&lt;T&gt; dx = Vector&lt;T&gt;(x_dim);</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    </div>
-<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classEkf.html#a140b16c6e369142ffe7933b9a0f3e53c">  139</a></span>&#160;    Vector&lt;T&gt; dx = Vector&lt;T&gt;(x_dim);</div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classEkf.html#a40cba21a5e6937f3b54daa7d55c047d6">  139</a></span>&#160;    symMatrix&lt;T&gt; P = symMatrix&lt;T&gt;(x_dim, x_dim);</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    </div>
-<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="classEkf.html#a40cba21a5e6937f3b54daa7d55c047d6">  142</a></span>&#160;    symMatrix&lt;T&gt; P = symMatrix&lt;T&gt;(x_dim, x_dim);</div>
+<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="classEkf.html#a2ae73e0c4ca1fea2df4ecdc03c0573e9">  142</a></span>&#160;    Vector&lt;T&gt; U = Vector&lt;T&gt;(u_dim);</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    </div>
-<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="classEkf.html#a2ae73e0c4ca1fea2df4ecdc03c0573e9">  145</a></span>&#160;    Vector&lt;T&gt; U = Vector&lt;T&gt;(u_dim);</div>
+<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="classEkf.html#a3ea43dc3b7f0f92a45537f2b215821c5">  145</a></span>&#160;    Vector&lt;T&gt; du = Vector&lt;T&gt;(u_dim);</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    </div>
-<div class="line"><a name="l00148"></a><span class="lineno"><a class="line" href="classEkf.html#a3ea43dc3b7f0f92a45537f2b215821c5">  148</a></span>&#160;    Vector&lt;T&gt; du = Vector&lt;T&gt;(u_dim);</div>
+<div class="line"><a name="l00148"></a><span class="lineno"><a class="line" href="classEkf.html#afe26209d15363d02eb64e8037be53bd2">  148</a></span>&#160;    symMatrix&lt;T&gt; Cov_U = symMatrix&lt;T&gt;(u_dim);</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    </div>
-<div class="line"><a name="l00151"></a><span class="lineno"><a class="line" href="classEkf.html#afe26209d15363d02eb64e8037be53bd2">  151</a></span>&#160;    symMatrix&lt;T&gt; Cov_U = symMatrix&lt;T&gt;(u_dim);</div>
+<div class="line"><a name="l00151"></a><span class="lineno"><a class="line" href="classEkf.html#adfcea4e63e3ad4a0948ed91971318c6b">  151</a></span>&#160;    Vector&lt;T&gt; C = Vector&lt;T&gt;(c_dim);</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    </div>
-<div class="line"><a name="l00154"></a><span class="lineno"><a class="line" href="classEkf.html#adfcea4e63e3ad4a0948ed91971318c6b">  154</a></span>&#160;    Vector&lt;T&gt; C = Vector&lt;T&gt;(c_dim);</div>
+<div class="line"><a name="l00154"></a><span class="lineno"><a class="line" href="classEkf.html#ac0d66ebe5d08951c479cf81082160aef">  154</a></span>&#160;    Vector&lt;T&gt; dc = Vector&lt;T&gt;(c_dim);</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    </div>
-<div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="classEkf.html#ac0d66ebe5d08951c479cf81082160aef">  157</a></span>&#160;    Vector&lt;T&gt; dc = Vector&lt;T&gt;(c_dim);</div>
+<div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="classEkf.html#a93d391350192b79e5eadb65a7a38f12a">  157</a></span>&#160;    Vector&lt;bool&gt; updateMahalanobis = Vector&lt;bool&gt;(z_num);</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    </div>
-<div class="line"><a name="l00160"></a><span class="lineno"><a class="line" href="classEkf.html#a93d391350192b79e5eadb65a7a38f12a">  160</a></span>&#160;    Vector&lt;bool&gt; updateMahalanobis = Vector&lt;bool&gt;(z_num);</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    </div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <a class="code" href="classEkf.html">Ekf</a>();</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    </div>
-<div class="line"><a name="l00165"></a><span class="lineno"><a class="line" href="classEkf.html#a65b5fe77e7303998c33011f6c66e2600">  165</a></span>&#160;    <a class="code" href="classEkf.html#a65b5fe77e7303998c33011f6c66e2600">Ekf</a>(Vector_f3&lt;T&gt; f) : <a class="code" href="classEkf.html">Ekf</a>() { setPredictionFunction(f); }</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <a class="code" href="classEkf.html">Ekf</a>();</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    </div>
+<div class="line"><a name="l00162"></a><span class="lineno"><a class="line" href="classEkf.html#a65b5fe77e7303998c33011f6c66e2600">  162</a></span>&#160;    <a class="code" href="classEkf.html#a65b5fe77e7303998c33011f6c66e2600">Ekf</a>(Vector_f3&lt;T&gt; f) : <a class="code" href="classEkf.html">Ekf</a>() { setPredictionFunction(f); }</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno"><a class="line" href="classEkf.html#aa88f3705f943399727dbc61461802cbc">  165</a></span>&#160;    <a class="code" href="classEkf.html#aa88f3705f943399727dbc61461802cbc">~Ekf</a>(){};</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
-<div class="line"><a name="l00168"></a><span class="lineno"><a class="line" href="classEkf.html#aa88f3705f943399727dbc61461802cbc">  168</a></span>&#160;    <a class="code" href="classEkf.html#aa88f3705f943399727dbc61461802cbc">~Ekf</a>(){};</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
-<div class="line"><a name="l00171"></a><span class="lineno"><a class="line" href="classEkf.html#a21fc17b1e939e3bc67d983acc14a77d9">  171</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classEkf.html#a21fc17b1e939e3bc67d983acc14a77d9">setPredictionFunction</a>(Vector_f3&lt;T&gt; f) { this-&gt;f = f; }</div>
+<div class="line"><a name="l00168"></a><span class="lineno"><a class="line" href="classEkf.html#a21fc17b1e939e3bc67d983acc14a77d9">  168</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classEkf.html#a21fc17b1e939e3bc67d983acc14a77d9">setPredictionFunction</a>(Vector_f3&lt;T&gt; f) { this-&gt;f = f; }</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    </div>
+<div class="line"><a name="l00171"></a><span class="lineno"><a class="line" href="classEkf.html#a545e6b4d5240291500ab5731ccf3cc1d">  171</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classEkf.html#a545e6b4d5240291500ab5731ccf3cc1d">setJacobianFunction_Fx</a>(Matrix_f3&lt;T&gt; Fx) { this-&gt;Fx = Fx; }</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    </div>
-<div class="line"><a name="l00174"></a><span class="lineno"><a class="line" href="classEkf.html#a545e6b4d5240291500ab5731ccf3cc1d">  174</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classEkf.html#a545e6b4d5240291500ab5731ccf3cc1d">setJacobianFunction_Fx</a>(Matrix_f3&lt;T&gt; Fx) { this-&gt;Fx = Fx; }</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    </div>
-<div class="line"><a name="l00177"></a><span class="lineno"><a class="line" href="classEkf.html#a4d66dbca0d5f520ed36d4a0517de2da1">  177</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classEkf.html#a4d66dbca0d5f520ed36d4a0517de2da1">setJacobianFunction_Fu</a>(Matrix_f3&lt;T&gt; Fu) { this-&gt;Fu = Fu; }</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keywordtype">void</span> setMeasurementFunction(Vector_f2&lt;T&gt; h, <span class="keywordtype">size_t</span> z_dim, <span class="keywordtype">size_t</span> z_idx = 0);</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    </div>
-<div class="line"><a name="l00182"></a><span class="lineno"><a class="line" href="classEkf.html#a487bfa60ab423109b9a15be4133d5a51">  182</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classEkf.html#a487bfa60ab423109b9a15be4133d5a51">setJacobianFunction_H</a>(Matrix_f2&lt;T&gt; H, <span class="keywordtype">size_t</span> z_idx = 0) { this-&gt;H[z_idx] = H; }</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> predict();</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> update(<span class="keyword">const</span> Vector&lt;T&gt; &amp;Z, <span class="keyword">const</span> symMatrix&lt;T&gt; &amp;R, <span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx = 0);</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
-<div class="line"><a name="l00188"></a><span class="lineno"><a class="line" href="classEkf.html#a254a497a5c7134e01d6ff28afeb7f4f6">  188</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="classEkf.html#a254a497a5c7134e01d6ff28afeb7f4f6">getMahalanobisDistance</a>(<span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx = 0)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ds[z_idx]; }</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;};</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="preprocessor">#ifndef EKF_CPP</span></div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ekf_8cpp.html">ekf.cpp</a>&quot;</span></div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// EKF_HPP</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno"><a class="line" href="classEkf.html#a4d66dbca0d5f520ed36d4a0517de2da1">  174</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classEkf.html#a4d66dbca0d5f520ed36d4a0517de2da1">setJacobianFunction_Fu</a>(Matrix_f3&lt;T&gt; Fu) { this-&gt;Fu = Fu; }</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="keywordtype">void</span> setMeasurementFunction(Vector_f2&lt;T&gt; h, <span class="keywordtype">size_t</span> z_dim, <span class="keywordtype">size_t</span> z_idx = 0);</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    </div>
+<div class="line"><a name="l00179"></a><span class="lineno"><a class="line" href="classEkf.html#a487bfa60ab423109b9a15be4133d5a51">  179</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classEkf.html#a487bfa60ab423109b9a15be4133d5a51">setJacobianFunction_H</a>(Matrix_f2&lt;T&gt; H, <span class="keywordtype">size_t</span> z_idx = 0) { this-&gt;H[z_idx] = H; }</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> predict();</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> compute_H_P(<span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx = 0);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> computeResidualPrecision(<span class="keyword">const</span> symMatrix&lt;T&gt; &amp;R, <span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx = 0);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> computeResidual(<span class="keyword">const</span> Vector&lt;T&gt; &amp;Z, <span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx = 0);</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> updateStateCovariance(<span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx = 0);</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    </div>
+<div class="line"><a name="l00200"></a><span class="lineno"><a class="line" href="classEkf.html#ab0e6bd7e7ec1ef56db6a70bdc5f2db3e">  200</a></span>&#160;    <span class="keyword">inline</span> T <a class="code" href="classEkf.html#ab0e6bd7e7ec1ef56db6a70bdc5f2db3e">mahalanobisDistance</a>(<span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx = 0) { <span class="keywordflow">return</span> y[z_idx].dot(*(S_inv[z_idx] * y[z_idx]).release());}</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> update(<span class="keyword">const</span> Vector&lt;T&gt; &amp;Z, <span class="keyword">const</span> symMatrix&lt;T&gt; &amp;R, <span class="keyword">const</span> <span class="keywordtype">size_t</span> z_idx = 0);</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;};</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="preprocessor">#ifndef EKF_CPP</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ekf_8cpp.html">ekf.cpp</a>&quot;</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// EKF_HPP</span></div>
 <div class="ttc" id="aclassEkf_html"><div class="ttname"><a href="classEkf.html">Ekf</a></div><div class="ttdoc">A generic implementation of an Extended Kalman Filter (EKF).</div><div class="ttdef"><b>Definition:</b> ekf.hpp:59</div></div>
-<div class="ttc" id="aclassEkf_html_a21fc17b1e939e3bc67d983acc14a77d9"><div class="ttname"><a href="classEkf.html#a21fc17b1e939e3bc67d983acc14a77d9">Ekf::setPredictionFunction</a></div><div class="ttdeci">void setPredictionFunction(Vector_f3&lt; T &gt; f)</div><div class="ttdef"><b>Definition:</b> ekf.hpp:171</div></div>
-<div class="ttc" id="aclassEkf_html_a254a497a5c7134e01d6ff28afeb7f4f6"><div class="ttname"><a href="classEkf.html#a254a497a5c7134e01d6ff28afeb7f4f6">Ekf::getMahalanobisDistance</a></div><div class="ttdeci">float getMahalanobisDistance(const size_t z_idx=0) const</div><div class="ttdef"><b>Definition:</b> ekf.hpp:188</div></div>
-<div class="ttc" id="aclassEkf_html_a487bfa60ab423109b9a15be4133d5a51"><div class="ttname"><a href="classEkf.html#a487bfa60ab423109b9a15be4133d5a51">Ekf::setJacobianFunction_H</a></div><div class="ttdeci">void setJacobianFunction_H(Matrix_f2&lt; T &gt; H, size_t z_idx=0)</div><div class="ttdef"><b>Definition:</b> ekf.hpp:182</div></div>
-<div class="ttc" id="aclassEkf_html_a4d66dbca0d5f520ed36d4a0517de2da1"><div class="ttname"><a href="classEkf.html#a4d66dbca0d5f520ed36d4a0517de2da1">Ekf::setJacobianFunction_Fu</a></div><div class="ttdeci">void setJacobianFunction_Fu(Matrix_f3&lt; T &gt; Fu)</div><div class="ttdef"><b>Definition:</b> ekf.hpp:177</div></div>
-<div class="ttc" id="aclassEkf_html_a545e6b4d5240291500ab5731ccf3cc1d"><div class="ttname"><a href="classEkf.html#a545e6b4d5240291500ab5731ccf3cc1d">Ekf::setJacobianFunction_Fx</a></div><div class="ttdeci">void setJacobianFunction_Fx(Matrix_f3&lt; T &gt; Fx)</div><div class="ttdef"><b>Definition:</b> ekf.hpp:174</div></div>
-<div class="ttc" id="aclassEkf_html_a65b5fe77e7303998c33011f6c66e2600"><div class="ttname"><a href="classEkf.html#a65b5fe77e7303998c33011f6c66e2600">Ekf::Ekf</a></div><div class="ttdeci">Ekf(Vector_f3&lt; T &gt; f)</div><div class="ttdef"><b>Definition:</b> ekf.hpp:165</div></div>
-<div class="ttc" id="aclassEkf_html_aa88f3705f943399727dbc61461802cbc"><div class="ttname"><a href="classEkf.html#aa88f3705f943399727dbc61461802cbc">Ekf::~Ekf</a></div><div class="ttdeci">~Ekf()</div><div class="ttdef"><b>Definition:</b> ekf.hpp:168</div></div>
+<div class="ttc" id="aclassEkf_html_a21fc17b1e939e3bc67d983acc14a77d9"><div class="ttname"><a href="classEkf.html#a21fc17b1e939e3bc67d983acc14a77d9">Ekf::setPredictionFunction</a></div><div class="ttdeci">void setPredictionFunction(Vector_f3&lt; T &gt; f)</div><div class="ttdef"><b>Definition:</b> ekf.hpp:168</div></div>
+<div class="ttc" id="aclassEkf_html_a487bfa60ab423109b9a15be4133d5a51"><div class="ttname"><a href="classEkf.html#a487bfa60ab423109b9a15be4133d5a51">Ekf::setJacobianFunction_H</a></div><div class="ttdeci">void setJacobianFunction_H(Matrix_f2&lt; T &gt; H, size_t z_idx=0)</div><div class="ttdef"><b>Definition:</b> ekf.hpp:179</div></div>
+<div class="ttc" id="aclassEkf_html_a4d66dbca0d5f520ed36d4a0517de2da1"><div class="ttname"><a href="classEkf.html#a4d66dbca0d5f520ed36d4a0517de2da1">Ekf::setJacobianFunction_Fu</a></div><div class="ttdeci">void setJacobianFunction_Fu(Matrix_f3&lt; T &gt; Fu)</div><div class="ttdef"><b>Definition:</b> ekf.hpp:174</div></div>
+<div class="ttc" id="aclassEkf_html_a545e6b4d5240291500ab5731ccf3cc1d"><div class="ttname"><a href="classEkf.html#a545e6b4d5240291500ab5731ccf3cc1d">Ekf::setJacobianFunction_Fx</a></div><div class="ttdeci">void setJacobianFunction_Fx(Matrix_f3&lt; T &gt; Fx)</div><div class="ttdef"><b>Definition:</b> ekf.hpp:171</div></div>
+<div class="ttc" id="aclassEkf_html_a65b5fe77e7303998c33011f6c66e2600"><div class="ttname"><a href="classEkf.html#a65b5fe77e7303998c33011f6c66e2600">Ekf::Ekf</a></div><div class="ttdeci">Ekf(Vector_f3&lt; T &gt; f)</div><div class="ttdef"><b>Definition:</b> ekf.hpp:162</div></div>
+<div class="ttc" id="aclassEkf_html_aa88f3705f943399727dbc61461802cbc"><div class="ttname"><a href="classEkf.html#aa88f3705f943399727dbc61461802cbc">Ekf::~Ekf</a></div><div class="ttdeci">~Ekf()</div><div class="ttdef"><b>Definition:</b> ekf.hpp:165</div></div>
+<div class="ttc" id="aclassEkf_html_ab0e6bd7e7ec1ef56db6a70bdc5f2db3e"><div class="ttname"><a href="classEkf.html#ab0e6bd7e7ec1ef56db6a70bdc5f2db3e">Ekf::mahalanobisDistance</a></div><div class="ttdeci">T mahalanobisDistance(const size_t z_idx=0)</div><div class="ttdoc">Compute the Mahalanobis distance for a specific measurement type relative to last update of residual ...</div><div class="ttdef"><b>Definition:</b> ekf.hpp:200</div></div>
 <div class="ttc" id="aekf_8cpp_html"><div class="ttname"><a href="ekf_8cpp.html">ekf.cpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
