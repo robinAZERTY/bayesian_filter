@@ -125,7 +125,7 @@ def plot(data_i_j_k, df, lin1, lin2, lin3, poly, poly2, show=True):
         plt.show()
     
     #export this plot in lib/ESP32AlgebraFilters/docs/ekf_complexity_analysis
-    fig.savefig('docs/efficiency'+filter_type+'_complexity_analysis.png', dpi=200)
+    fig.savefig('docs/efficiency/'+filter_type+'_complexity_analysis.png', dpi=200)
 
 
 def analyse(results):
