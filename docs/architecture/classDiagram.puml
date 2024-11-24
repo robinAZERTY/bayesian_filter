@@ -19,6 +19,7 @@ class Ekf <template<size_t x_dim, size_t u_dim, size_t c_dim=1, size_t z_num=1, 
 	-Fc : Matrix_f3<T>
 	-Fu : Matrix_f3<T>
 	-Fx : Matrix_f3<T>
+	+mahalanobisDistance(const size_t z_idx) : T
 	+C : Vector<T>
 	+U : Vector<T>
 	+X : Vector<T>
@@ -32,14 +33,15 @@ class Ekf <template<size_t x_dim, size_t u_dim, size_t c_dim=1, size_t z_num=1, 
 	-h : Vector_f2<T>[]
 	-f : Vector_f3<T>
 	-initted : bool
-	-alpha : float
-	+getMahalanobisDistance(const size_t z_idx) : float {query}
-	-ds : float[]
 	-S_inv : ldl_matrix<T>[]
 	-K : rowMajorMatrix<T>
 	-z_dim : size_t[]
 	+Cov_U : symMatrix<T>
 	+P : symMatrix<T>
+	-pre_S : symMatrix<T>[]
+	+computeResidual(const Vector<T>& Z, const size_t z_idx) : void
+	+computeResidualPrecision(const symMatrix<T>& R, const size_t z_idx) : void
+	+compute_H_P(const size_t z_idx) : void
 	-compute_S(const size_t z_idx) : void
 	-finite_diff_Fu(const size_t i) : void
 	-finite_diff_Fu() : void
@@ -54,6 +56,7 @@ class Ekf <template<size_t x_dim, size_t u_dim, size_t c_dim=1, size_t z_num=1, 
 	+setMeasurementFunction(Vector_f2<T> h, size_t z_dim, size_t z_idx) : void
 	+setPredictionFunction(Vector_f3<T> f) : void
 	+update(const Vector<T>& Z, const symMatrix<T>& R, const size_t z_idx) : void
+	+updateStateCovariance(const size_t z_idx) : void
 }
 
 
