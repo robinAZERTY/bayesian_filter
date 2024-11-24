@@ -1,7 +1,14 @@
 name: Generate Doxygen Documentation
-
 on:
   pull_request:
+    branches:
+      - release  # Déclenche le workflow sur la branche principale
+    paths:
+      - 'src/**'        # Déclenche le workflow si un fichier dans src/ est modifié
+      - 'include/**'     # Déclenche le workflow si un fichier dans include/ est modifié
+      - 'README.md'      # Si tu veux aussi inclure le README pour la page principale
+      - '.github/**'     # Inclure les workflows ou autres fichiers de configuration
+  push:
     branches:
       - release  # Déclenche le workflow sur la branche principale
     paths:
