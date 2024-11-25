@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['ekf_28',['Ekf',['../classEkf.html#af183d5526f13066dc72d4d986c0ca0c9',1,'Ekf::Ekf()'],['../classEkf.html#a65b5fe77e7303998c33011f6c66e2600',1,'Ekf::Ekf(Vector_f3&lt; T &gt; f)']]]
+  ['compute_5fh_5fp_32',['compute_H_P',['../classEkf.html#a017aa12dd1b167c8385e403560051bff',1,'Ekf']]],
+  ['computeresidual_33',['computeResidual',['../classEkf.html#a343ba0db856689322208abf9a25471da',1,'Ekf']]],
+  ['computeresidualprecision_34',['computeResidualPrecision',['../classEkf.html#a4bf908db6fe77f7ecfcd58447752c767',1,'Ekf']]]
 ];

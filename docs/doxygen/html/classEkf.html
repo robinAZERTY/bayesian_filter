@@ -98,11 +98,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7dfb45f6be5be601b2af253db7c3d8bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEkf.html#a7dfb45f6be5be601b2af253db7c3d8bb">predict</a> ()</td></tr>
 <tr class="memdesc:a7dfb45f6be5be601b2af253db7c3d8bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Predicts the state using the state transition function.  <a href="classEkf.html#a7dfb45f6be5be601b2af253db7c3d8bb">More...</a><br /></td></tr>
 <tr class="separator:a7dfb45f6be5be601b2af253db7c3d8bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a017aa12dd1b167c8385e403560051bff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEkf.html#a017aa12dd1b167c8385e403560051bff">compute_H_P</a> (const size_t z_idx=0)</td></tr>
+<tr class="memdesc:a017aa12dd1b167c8385e403560051bff"><td class="mdescLeft">&#160;</td><td class="mdescRight">First part of the update function, computes the measurement prediction and the measurement Jacobian.  <a href="classEkf.html#a017aa12dd1b167c8385e403560051bff">More...</a><br /></td></tr>
+<tr class="separator:a017aa12dd1b167c8385e403560051bff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bf908db6fe77f7ecfcd58447752c767"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEkf.html#a4bf908db6fe77f7ecfcd58447752c767">computeResidualPrecision</a> (const symMatrix&lt; T &gt; &amp;R, const size_t z_idx=0)</td></tr>
+<tr class="memdesc:a4bf908db6fe77f7ecfcd58447752c767"><td class="mdescLeft">&#160;</td><td class="mdescRight">Second part of the update function, computes the residual and the residual precision.  <a href="classEkf.html#a4bf908db6fe77f7ecfcd58447752c767">More...</a><br /></td></tr>
+<tr class="separator:a4bf908db6fe77f7ecfcd58447752c767"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a343ba0db856689322208abf9a25471da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEkf.html#a343ba0db856689322208abf9a25471da">computeResidual</a> (const Vector&lt; T &gt; &amp;Z, const size_t z_idx=0)</td></tr>
+<tr class="memdesc:a343ba0db856689322208abf9a25471da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Third part of the update function, computes the residual and updates the state and covariance.  <a href="classEkf.html#a343ba0db856689322208abf9a25471da">More...</a><br /></td></tr>
+<tr class="separator:a343ba0db856689322208abf9a25471da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c9e193e629be11fcac3a8c272f3e1f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEkf.html#a0c9e193e629be11fcac3a8c272f3e1f6">updateStateCovariance</a> (const size_t z_idx=0)</td></tr>
+<tr class="memdesc:a0c9e193e629be11fcac3a8c272f3e1f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Final part of the update function, computes the state and covariance.  <a href="classEkf.html#a0c9e193e629be11fcac3a8c272f3e1f6">More...</a><br /></td></tr>
+<tr class="separator:a0c9e193e629be11fcac3a8c272f3e1f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0e6bd7e7ec1ef56db6a70bdc5f2db3e"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEkf.html#ab0e6bd7e7ec1ef56db6a70bdc5f2db3e">mahalanobisDistance</a> (const size_t z_idx=0)</td></tr>
+<tr class="memdesc:ab0e6bd7e7ec1ef56db6a70bdc5f2db3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Mahalanobis distance for a specific measurement type relative to last update of residual and residual precision.  <a href="classEkf.html#ab0e6bd7e7ec1ef56db6a70bdc5f2db3e">More...</a><br /></td></tr>
+<tr class="separator:ab0e6bd7e7ec1ef56db6a70bdc5f2db3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88b5346b0af888af2424083b295b0453"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEkf.html#a88b5346b0af888af2424083b295b0453">update</a> (const Vector&lt; T &gt; &amp;Z, const symMatrix&lt; T &gt; &amp;R, const size_t z_idx=0)</td></tr>
 <tr class="memdesc:a88b5346b0af888af2424083b295b0453"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the state and covariance matrix using a new measurement and measurement noise covariance.  <a href="classEkf.html#a88b5346b0af888af2424083b295b0453">More...</a><br /></td></tr>
 <tr class="separator:a88b5346b0af888af2424083b295b0453"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a254a497a5c7134e01d6ff28afeb7f4f6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEkf.html#a254a497a5c7134e01d6ff28afeb7f4f6">getMahalanobisDistance</a> (const size_t z_idx=0) const</td></tr>
-<tr class="separator:a254a497a5c7134e01d6ff28afeb7f4f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -168,7 +181,6 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
 </div><div class="memdoc">
 
 <p>Default constructor for the EKF filter. </p>
-<p>Default constructor</p>
 <p>Initializes the state vector <code>X</code>, the state covariance <code>P</code>, and other necessary vectors to default values. Sets small values for numerical differentiation and initializes Mahalanobis distance tracking. </p>
 
 </div>
@@ -231,8 +243,142 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a254a497a5c7134e01d6ff28afeb7f4f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a254a497a5c7134e01d6ff28afeb7f4f6">&#9670;&nbsp;</a></span>getMahalanobisDistance()</h2>
+<a id="a017aa12dd1b167c8385e403560051bff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a017aa12dd1b167c8385e403560051bff">&#9670;&nbsp;</a></span>compute_H_P()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classEkf.html">Ekf</a>&lt; x_dim, u_dim, c_dim, z_num, T &gt;::compute_H_P </td>
+          <td>(</td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>z_idx</em> = <code>0</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>First part of the update function, computes the measurement prediction and the measurement Jacobian. </p>
+<p>Additionally, it computes the common expression <code>H*P</code> which is used to reduce the number of matrix multiplications during the update step.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">z_idx</td><td>The index of the measurement type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a343ba0db856689322208abf9a25471da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a343ba0db856689322208abf9a25471da">&#9670;&nbsp;</a></span>computeResidual()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classEkf.html">Ekf</a>&lt; x_dim, u_dim, c_dim, z_num, T &gt;::computeResidual </td>
+          <td>(</td>
+          <td class="paramtype">const Vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>z_idx</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Third part of the update function, computes the residual and updates the state and covariance. </p>
+<p>This function compute the difference between the measurement and the predicted measurement</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Z</td><td>The new measurement vector. </td></tr>
+    <tr><td class="paramname">z_idx</td><td>The index of the measurement type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4bf908db6fe77f7ecfcd58447752c767"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bf908db6fe77f7ecfcd58447752c767">&#9670;&nbsp;</a></span>computeResidualPrecision()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classEkf.html">Ekf</a>&lt; x_dim, u_dim, c_dim, z_num, T &gt;::computeResidualPrecision </td>
+          <td>(</td>
+          <td class="paramtype">const symMatrix&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>R</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>z_idx</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Second part of the update function, computes the residual and the residual precision. </p>
+<p>This function is a part of the update step.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Z</td><td>The new measurement vector. </td></tr>
+    <tr><td class="paramname">R</td><td>The measurement noise covariance matrix. </td></tr>
+    <tr><td class="paramname">z_idx</td><td>The index of the measurement type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab0e6bd7e7ec1ef56db6a70bdc5f2db3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0e6bd7e7ec1ef56db6a70bdc5f2db3e">&#9670;&nbsp;</a></span>mahalanobisDistance()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -243,11 +389,11 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float <a class="el" href="classEkf.html">Ekf</a>&lt; x_dim, u_dim, c_dim, z_num, T &gt;::getMahalanobisDistance </td>
+          <td class="memname">T <a class="el" href="classEkf.html">Ekf</a>&lt; x_dim, u_dim, c_dim, z_num, T &gt;::mahalanobisDistance </td>
           <td>(</td>
           <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>z_idx</em> = <code>0</code></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -256,7 +402,16 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, type
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the Mahalanobis distance for a specific measurement type </p>
+
+<p>Compute the Mahalanobis distance for a specific measurement type relative to last update of residual and residual precision. </p>
+<p>Should be called after the "computeResidualPrecision" function Can be used to monitor the likelihood of the given measurement. It is useful for detecting outliers or resolving identification issues (when you receive a measurement and you don't know witch measurement type it is). If everything is perfectly modelled, the average Mahalanobis distance should be 1 (after averaging over a long period).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">z_idx</td><td>The index of the measurement type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The Mahalanobis distance. </dd></dl>
 
 </div>
 </div>
@@ -283,7 +438,6 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
 </div><div class="memdoc">
 
 <p>Predicts the state using the state transition function. </p>
-<p>Perform the prediction step of the EKF</p>
 <p>This function computes the predicted state <code>X</code> based on the previous state and the state transition function. It also updates the state covariance matrix <code>P</code> based on the state transition Jacobian.</p>
 <p>Throws an exception if the state transition function is not set. </p>
 
@@ -421,7 +575,6 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
 </div><div class="memdoc">
 
 <p>Sets the measurement function for a specific sensor type. </p>
-<p>Set the measurement function for a specific measurement type</p>
 <p>This function defines the measurement function and measurement dimension for a particular sensor type. It also initializes the corresponding Jacobians and matrices.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -506,14 +659,59 @@ template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &
 </div><div class="memdoc">
 
 <p>Updates the state and covariance matrix using a new measurement and measurement noise covariance. </p>
-<p>Perform the update step of the EKF with a measurement vector</p>
-<p>This function updates the state vector <code>X</code> and the state covariance matrix <code>P</code> based on the new measurement <code>Z</code> and the measurement noise covariance matrix <code>R</code>. The Kalman gain is also computed and used to adjust the state.</p>
-<p>Throws an exception if the measurement function is not set or if there is a dimension mismatch.</p>
+<p>This function updates the state vector <code>X</code> and the state covariance matrix <code>P</code> based on the new measurement <code>Z</code> and the measurement noise covariance matrix <code>R</code>. The Kalman gain is also computed and used to adjust the state. Throws an exception if the measurement function is not set or if there is a dimension mismatch. This function can be split into multiple parts for better readability and modularity as follows: </p><div class="fragment"><div class="line"><a class="code" href="classEkf.html#a017aa12dd1b167c8385e403560051bff">compute_H_P</a>(z_idx);</div>
+<div class="line"><a class="code" href="classEkf.html#a4bf908db6fe77f7ecfcd58447752c767">computeResidualPrecision</a>(R, z_idx);</div>
+<div class="line"><a class="code" href="classEkf.html#a343ba0db856689322208abf9a25471da">computeResidual</a>(Z, z_idx);</div>
+<div class="line"><a class="code" href="classEkf.html#a0c9e193e629be11fcac3a8c272f3e1f6">updateStateCovariance</a>(z_idx);</div>
+<div class="ttc" id="aclassEkf_html_a017aa12dd1b167c8385e403560051bff"><div class="ttname"><a href="classEkf.html#a017aa12dd1b167c8385e403560051bff">Ekf::compute_H_P</a></div><div class="ttdeci">void compute_H_P(const size_t z_idx=0)</div><div class="ttdoc">First part of the update function, computes the measurement prediction and the measurement Jacobian.</div><div class="ttdef"><b>Definition:</b> ekf.cpp:209</div></div>
+<div class="ttc" id="aclassEkf_html_a0c9e193e629be11fcac3a8c272f3e1f6"><div class="ttname"><a href="classEkf.html#a0c9e193e629be11fcac3a8c272f3e1f6">Ekf::updateStateCovariance</a></div><div class="ttdeci">void updateStateCovariance(const size_t z_idx=0)</div><div class="ttdoc">Final part of the update function, computes the state and covariance.</div><div class="ttdef"><b>Definition:</b> ekf.cpp:272</div></div>
+<div class="ttc" id="aclassEkf_html_a343ba0db856689322208abf9a25471da"><div class="ttname"><a href="classEkf.html#a343ba0db856689322208abf9a25471da">Ekf::computeResidual</a></div><div class="ttdeci">void computeResidual(const Vector&lt; T &gt; &amp;Z, const size_t z_idx=0)</div><div class="ttdoc">Third part of the update function, computes the residual and updates the state and covariance.</div><div class="ttdef"><b>Definition:</b> ekf.cpp:253</div></div>
+<div class="ttc" id="aclassEkf_html_a4bf908db6fe77f7ecfcd58447752c767"><div class="ttname"><a href="classEkf.html#a4bf908db6fe77f7ecfcd58447752c767">Ekf::computeResidualPrecision</a></div><div class="ttdeci">void computeResidualPrecision(const symMatrix&lt; T &gt; &amp;R, const size_t z_idx=0)</div><div class="ttdoc">Second part of the update function, computes the residual and the residual precision.</div><div class="ttdef"><b>Definition:</b> ekf.cpp:237</div></div>
+</div><!-- fragment --><p> Before calling</p><div class="fragment"><div class="line"><a class="code" href="classEkf.html#a0c9e193e629be11fcac3a8c272f3e1f6">updateStateCovariance</a> </div>
+</div><!-- fragment --><p>, you can check the Mahalanobis distance using <a class="el" href="classEkf.html#ab0e6bd7e7ec1ef56db6a70bdc5f2db3e">mahalanobisDistance</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Z</td><td>The new measurement vector. </td></tr>
     <tr><td class="paramname">R</td><td>The measurement noise covariance matrix. </td></tr>
     <tr><td class="paramname">z_idx</td><td>The index of the measurement type (default is 0). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0c9e193e629be11fcac3a8c272f3e1f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c9e193e629be11fcac3a8c272f3e1f6">&#9670;&nbsp;</a></span>updateStateCovariance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classEkf.html">Ekf</a>&lt; x_dim, u_dim, c_dim, z_num, T &gt;::updateStateCovariance </td>
+          <td>(</td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>z_idx</em> = <code>0</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Final part of the update function, computes the state and covariance. </p>
+<p>This function compute the Kalman gain and updates the state and covariance based on the measurement residual and the residual precision.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">z_idx</td><td>The index of the measurement type. </td></tr>
+    <tr><td class="paramname">updateMahalanobis</td><td>Flag indicating whether to update the Mahalanobis distance. </td></tr>
   </table>
   </dd>
 </dl>

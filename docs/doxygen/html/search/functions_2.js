@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['predict_30',['predict',['../classEkf.html#a7dfb45f6be5be601b2af253db7c3d8bb',1,'Ekf']]]
+  ['mahalanobisdistance_36',['mahalanobisDistance',['../classEkf.html#ab0e6bd7e7ec1ef56db6a70bdc5f2db3e',1,'Ekf']]]
 ];
