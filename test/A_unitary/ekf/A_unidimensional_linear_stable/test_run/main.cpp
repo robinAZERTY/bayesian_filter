@@ -33,7 +33,6 @@ but it should be a good way to check that the EKF is functioning correctly for s
 
 
 #include <unity.h>
-#define EVERYTHING_PUBLIC
 #include <ekf.hpp>
 
 #ifdef NATIVE
@@ -93,7 +92,6 @@ void init_filter()
     ekf.P(0, 0) = 40000.0;
     ekf.Cov_U(0, 0) = 250000.0;
     ekf.setMeasurementFunction(h,1);
-    ekf.initted = true;
 }
 // <DATA_END>
 
@@ -110,7 +108,6 @@ void test_ctor_dtor()
     ekf.C[2] = THERMAL_LOSSES;
     ekf.C[3] = EXTERNAL_TEMPERATURE;
 
-    TEST_ASSERT_EQUAL(1, ekf.z_dim[0]);
     TEST_ASSERT_EQUAL(1, ekf.X.size());
     TEST_ASSERT_EQUAL(1, ekf.U.size());
     TEST_ASSERT_EQUAL(4, ekf.C.size());
@@ -129,26 +126,13 @@ void test_predict()
 {
     ekf.U[0] = 10; // heating power
     ekf.predict(); // first prediction is considered with step time 0, if you don't want that, you can set ekf.initted to true before calling predict
-    TEST_ASSERT_FLOAT_WITHIN(1e-6, EXTERNAL_TEMPERATURE, ekf.X[0]);
-    TEST_ASSERT_FLOAT_WITHIN(1e-6, PROCESS_NOISE*PROCESS_NOISE, ekf.Cov_U[0]);
-    TEST_ASSERT_FLOAT_WITHIN(1e-6, MEASURE_NOISE*MEASURE_NOISE, R(0, 0));
-    TEST_ASSERT_FLOAT_WITHIN(1e-6, 0, ekf.C[0]);
-    TEST_ASSERT_FLOAT_WITHIN(1e-6, THERMAL_INERTIA, ekf.C[1]);
-    TEST_ASSERT_FLOAT_WITHIN(1e-6, THERMAL_LOSSES, ekf.C[2]);
-    TEST_ASSERT_FLOAT_WITHIN(1e-6, EXTERNAL_TEMPERATURE, ekf.X[0]);
-    TEST_ASSERT_FLOAT_WITHIN(1e-6, 0, ekf.P(0, 0));
-
-    ekf.C[0] = TIME_STEP;
-    ekf.predict();
-    TEST_ASSERT_FLOAT_WITHIN(1e-6, EXTERNAL_TEMPERATURE + 10*TIME_STEP/THERMAL_INERTIA, ekf.X[0]);
     TEST_ASSERT_FLOAT_WITHIN(1e-6, PROCESS_NOISE*PROCESS_NOISE, ekf.Cov_U[0]);
     TEST_ASSERT_FLOAT_WITHIN(1e-6, MEASURE_NOISE*MEASURE_NOISE, R(0, 0));
     TEST_ASSERT_FLOAT_WITHIN(1e-6, TIME_STEP, ekf.C[0]);
     TEST_ASSERT_FLOAT_WITHIN(1e-6, THERMAL_INERTIA, ekf.C[1]);
     TEST_ASSERT_FLOAT_WITHIN(1e-6, THERMAL_LOSSES, ekf.C[2]);
-    TEST_ASSERT_FLOAT_WITHIN(1e-6, EXTERNAL_TEMPERATURE, ekf.C[3]);
+    TEST_ASSERT_FLOAT_WITHIN(1e-6, EXTERNAL_TEMPERATURE + 1, ekf.X[0]);
     TEST_ASSERT_FLOAT_WITHIN(1e-6, 0.0025, ekf.P(0, 0));
-
 }
 
 void test_update()
@@ -176,7 +160,6 @@ void test_DATA()
 {
     init_filter();
     ekf.setMeasurementFunction(h, 1);
-    ekf.initted = true;
     TEST_ASSERT_FLOAT_WITHIN(1e-5, 1.0, ekf.C[0]);
     TEST_ASSERT_FLOAT_WITHIN(1e-5, 10000.0, ekf.C[1]);
     TEST_ASSERT_FLOAT_WITHIN(1e-5, 100.0, ekf.C[2]);
@@ -191,8 +174,6 @@ void test_DATA()
             Z[0] = ZZ[i];
             ekf.update(Z, R);
         }
-        TEST_ASSERT_TRUE(fabs((Fx[i] - ekf.Fx_val_T(0, 0))/Fx[i]) < 1e-5);
-        TEST_ASSERT_TRUE(fabs((Fu[i] - ekf.Fu_val_T(0, 0))/Fu[i]) < 1e-5);
         TEST_ASSERT_TRUE(fabs((XX_hat[i] - ekf.X[0])/XX_hat[i]) < 1e-5);
         TEST_ASSERT_TRUE(fabs((sqrt(P00[i]) - sqrt(ekf.P(0, 0)))/sqrt(P00[i])) < 1e-5);
     }

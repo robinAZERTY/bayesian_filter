@@ -55,11 +55,7 @@ using namespace operators;
 template <size_t x_dim, size_t u_dim, size_t c_dim = 1, size_t z_num = 1, typename T = float>
 class Ekf
 {
-#ifdef EVERYTHING_PUBLIC
-public:
-#else
 private:
-#endif
 
     /** State transition function */
     Vector_f3<T> f = nullptr;

@@ -81,14 +81,8 @@ inline void Ekf<x_dim, u_dim, c_dim, z_num, T>::predict()
     if (f == nullptr)
         throw "Ekf::predict() state transition function not set";
 
-    if (!initted)
-    {
-        prev_X = X;
-        initted = true;
-        C[0] = 0;
-    }
-    else
-        prev_X = X;
+
+    prev_X = X;
 
     X = f(prev_X, U, C);
 
