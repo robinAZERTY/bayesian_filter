@@ -9,7 +9,6 @@ pio test -e native
 
 
 #include <unity.h>
-#define EVERYTHING_PUBLIC
 #include <ekf.hpp>
 
 #ifdef NATIVE
@@ -99,7 +98,6 @@ void init_filter()
     ekf.Cov_U(1, 1) = 1.0000000000000002;
     ekf.setMeasurementFunction(h0,1,0);
     ekf.setMeasurementFunction(h1,1,1);
-    ekf.initted = true;
 }
 // <DATA_END>
 

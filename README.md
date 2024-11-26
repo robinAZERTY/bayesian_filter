@@ -26,7 +26,7 @@ The library is still under development. The EKF has been tested and should be fu
 - [X] Implement 1 dimensional tests for EKF
 - [X] Implement n dimensional tests for EKF
 - [X] Implement performance tests for EKF
-- [ ] write documentation for EKF
+- [X] write documentation for EKF
 - [ ] write examples for EKF
       
 Do the same for UKF and particle filter.

@@ -29,7 +29,6 @@ class Ekf <template<size_t x_dim, size_t u_dim, size_t c_dim=1, size_t z_num=1, 
 	-prev_X : Vector<T>
 	-h_val : Vector<T>[]
 	-y : Vector<T>[]
-	+updateMahalanobis : Vector<bool>
 	-h : Vector_f2<T>[]
 	-f : Vector_f3<T>
 	-initted : bool
@@ -42,7 +41,6 @@ class Ekf <template<size_t x_dim, size_t u_dim, size_t c_dim=1, size_t z_num=1, 
 	+computeResidual(const Vector<T>& Z, const size_t z_idx) : void
 	+computeResidualPrecision(const symMatrix<T>& R, const size_t z_idx) : void
 	+compute_H_P(const size_t z_idx) : void
-	-compute_S(const size_t z_idx) : void
 	-finite_diff_Fu(const size_t i) : void
 	-finite_diff_Fu() : void
 	-finite_diff_Fx(const size_t i) : void

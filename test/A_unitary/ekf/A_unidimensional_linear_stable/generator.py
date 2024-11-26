@@ -146,7 +146,6 @@ for key, value in init_conditions.items():
 
 # Ajout de l'initialisation de `ekf.X` avec la première valeur de `X`
 init_filter_content += "    ekf.setMeasurementFunction(h," + str(R.shape[0]) + ");\n"
-init_filter_content += "    ekf.initted = true;\n"
 init_filter_content += "}\n"
 
 data_content += init_filter_content
