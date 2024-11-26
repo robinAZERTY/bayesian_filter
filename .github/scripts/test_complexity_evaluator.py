@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 import itertools
 from scipy.integrate import dblquad
+from scipy.integrate import tplquad
 import json
 
 filter_type = "ekf"
@@ -208,6 +209,11 @@ def P(x, y):
     terms = poly.fit_transform(np.array([[x, y]]))  # créer les termes polynomiaux pour (x, y)
     return np.dot(terms, coefficients) + intercept
 
+def Q(x, y, z):
+    # Utiliser les termes du polynôme dans une fonction
+    terms = poly2.fit_transform(np.array([[x, y, z]]))  # créer les termes polynomiaux pour (x, y, z)
+    return np.dot(terms, coefficients) + intercept
+
 
 def compute_ekf_complexity_analysis(X_poly1, X_poly2, X_poly3, y1, y2, y3, lin1, lin2, lin3):
 
@@ -230,9 +236,10 @@ def compute_ekf_complexity_analysis(X_poly1, X_poly2, X_poly3, y1, y2, y3, lin1,
     ekf_complexity_analysis["current release"]["update"]["average in general uses cases"] =  integral / ((ekf_complexity_analysis["general uses cases"]["x max"] - ekf_complexity_analysis["general uses cases"]["x min"]) * (ekf_complexity_analysis["general uses cases"]["z max"] - ekf_complexity_analysis["general uses cases"]["z min"]))
     coefficients = lin3.coef_[0]
     intercept = lin3.intercept_[0]
-    integral, _ = dblquad(P, ekf_complexity_analysis["general uses cases"]["x min"], ekf_complexity_analysis["general uses cases"]["x max"], lambda x: ekf_complexity_analysis["general uses cases"]["z min"], lambda x: ekf_complexity_analysis["general uses cases"]["z max"])
-    ekf_complexity_analysis["current release"]["alloc"]["average in general uses cases"] =  integral / ((ekf_complexity_analysis["general uses cases"]["x max"] - ekf_complexity_analysis["general uses cases"]["x min"]) * (ekf_complexity_analysis["general uses cases"]["z max"] - ekf_complexity_analysis["general uses cases"]["z min"]))
-    
+    # integral, _ = dblquad(P, ekf_complexity_analysis["general uses cases"]["x min"], ekf_complexity_analysis["general uses cases"]["x max"], lambda x: ekf_complexity_analysis["general uses cases"]["z min"], lambda x: ekf_complexity_analysis["general uses cases"]["z max"])
+    # ekf_complexity_analysis["current release"]["alloc"]["average in general uses cases"] =  integral / ((ekf_complexity_analysis["general uses cases"]["x max"] - ekf_complexity_analysis["general uses cases"]["x min"]) * (ekf_complexity_analysis["general uses cases"]["z max"] - ekf_complexity_analysis["general uses cases"]["z min"]))
+    integral, _ = tplquad(Q, ekf_complexity_analysis["general uses cases"]["x min"], ekf_complexity_analysis["general uses cases"]["x max"], lambda x: ekf_complexity_analysis["general uses cases"]["u min"], lambda x: ekf_complexity_analysis["general uses cases"]["u max"], lambda x, y: ekf_complexity_analysis["general uses cases"]["z min"], lambda x, y: ekf_complexity_analysis["general uses cases"]["z max"])
+    ekf_complexity_analysis["current release"]["alloc"]["average in general uses cases"] =  integral / ((ekf_complexity_analysis["general uses cases"]["x max"] - ekf_complexity_analysis["general uses cases"]["x min"]) * (ekf_complexity_analysis["general uses cases"]["z max"] - ekf_complexity_analysis["general uses cases"]["z min"]) * (ekf_complexity_analysis["general uses cases"]["u max"] - ekf_complexity_analysis["general uses cases"]["u min"]))
 def format_percentage(value, threshold):
     percentage = value * 100  # Conversion en pourcentage
     # Vert si <= seuil, et rouge si > seuil
