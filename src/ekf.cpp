@@ -29,7 +29,6 @@ Ekf<x_dim, u_dim, c_dim, z_num, T>::Ekf()
     dx.fill(1e-4);
     du.fill(1e-4);
     dc.fill(1e-4);
-    updateMahalanobis.fill(false);
 }
 
 template <size_t x_dim, size_t u_dim, size_t c_dim, size_t z_num, typename T>

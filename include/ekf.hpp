@@ -177,14 +177,11 @@ public:
     /** Small system parameters epsilon for numerical differentiation */
     Vector<T> dc = Vector<T>(c_dim);
 
-    /** Flags indicating whether to update the Mahalanobis distance for each measurement type */
-    Vector<bool> updateMahalanobis = Vector<bool>(z_num);
-
     /**
      * @brief Default constructor for the EKF filter.
      *
      * Initializes the state vector `X`, the state covariance `P`, and other necessary vectors to default values.
-     * Sets small values for numerical differentiation and initializes Mahalanobis distance tracking.
+     * Sets small values for numerical differentiation.
      */
     Ekf();
 
