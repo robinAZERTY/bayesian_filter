@@ -22,14 +22,15 @@ The documentation of classes is available on [this page](https://robinazerty.git
 The library is still under development. The EKF has been tested and should be functional, as verified using UNITY. Refer to the [test section](test/) for details about the testing process, and check the [latest test coverage report](https://robinazerty.github.io/bayesian_filters/coverage_report/index.html) for an overview of the current coverage.
 
 ## Roadmap
-- [X] Implement EKF
-- [X] Implement 1 dimensional tests for EKF
-- [X] Implement n dimensional tests for EKF
-- [X] Implement performance tests for EKF
-- [X] write documentation for EKF
-- [X] write examples for EKF
-      
-Do the same for UKF and particle filter.
+
+| Task                                    | EKF | UKF | PF |
+|:---------------------------------------:|:--:|:--:|:--:|
+| Implement filter                        | ✅ | ⬜ | ⬜ |
+| Implement 1-dimensional tests           | ✅ | ⬜ | ⬜ |
+| Implement n-dimensional tests           | ✅ | ⬜ | ⬜ |
+| Implement performance tests             | ✅ | ⬜ | ⬜ |
+| Write documentation                     | ✅ | ⬜ | ⬜ |
+| Write examples                          | ✅ | ⬜ | ⬜ |
 
 
 ## License
