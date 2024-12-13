@@ -28,6 +28,7 @@ The library is still under development. The EKF has been tested and should be fu
 - [X] Implement performance tests for EKF
 - [X] write documentation for EKF
 - [ ] write examples for EKF
+- [ ] docusaurus instead of doxygen
       
 Do the same for UKF and particle filter.
 
