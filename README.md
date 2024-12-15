@@ -6,11 +6,17 @@ This library currently includes an Extended Kalman Filter (EKF) developed alongs
 ![Classes diagram](docs/architecture/classDiagram.svg)
 
 ## Time efficiency
+### Ekf
 The duration of prediction and update steps in the Extended Kalman Filter (EKF) is analyzed below. To do this, time measurements were taken for several problem sizes, varying the number of states (X_DIM), the number of control inputs (U_DIM) and the dimension of the measurement vector (Z_DIM). Speed tests ran on ESP32 with numerical jacobian's computation enabled. This gives an idea of the maximum frequency at which this class can operate for a given problem's size.
 
-![Efficiency](docs/efficiency/ekf_complexity_analysis.png)
+![EKF_Efficiency](docs/efficiency/ekf_complexity_analysis.png)
 The complexity of the EKF is obviously O(n^3).
 For more details, see the [ekf_complexity_analysis](docs/efficiency/ekf_complexity_analysis.json) where coefficients are stored and can be used to predict the time needed (in micros second) for a given problem size.
+
+### Ukf
+The UKF is currently in the performance improvement phase, so this plot might change slightly:
+![EKF_Efficiency](docs/efficiency/ukf_complexity_analysis.png)
+You can compare the [ukf_complexity_analysis](docs/efficiency/ukf_complexity_analysis.json) with the EKF's analysis.
 
 ## Usage
 This library is ideal for anyone learning how filters work in C++ on embedded platforms. The current release includes foundational an Extended Kalman filter, using [this linear algebra library](https://github.com/robinAZERTY/linear_algebra).
@@ -25,10 +31,10 @@ The library is still under development. The EKF has been tested and should be fu
 
 | Task                                    | EKF | UKF | PF |
 |:---------------------------------------:|:--:|:--:|:--:|
-| Implement filter                        | ✅ | ⬜ | ⬜ |
+| Implement filter                        | ✅ | ✅ | ⬜ |
 | Implement 1-dimensional tests           | ✅ | ✅ | ⬜ |
 | Implement n-dimensional tests           | ✅ | ⬜ | ⬜ |
-| Implement performance tests             | ✅ | ⬜ | ⬜ |
+| Implement performance tests             | ✅ | ✅ | ⬜ |
 | Write documentation                     | ✅ | ⬜ | ⬜ |
 | Write examples                          | ✅ | ⬜ | ⬜ |
 
