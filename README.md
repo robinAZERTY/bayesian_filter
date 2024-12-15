@@ -26,7 +26,7 @@ The library is still under development. The EKF has been tested and should be fu
 | Task                                    | EKF | UKF | PF |
 |:---------------------------------------:|:--:|:--:|:--:|
 | Implement filter                        | ✅ | ⬜ | ⬜ |
-| Implement 1-dimensional tests           | ✅ | ⬜ | ⬜ |
+| Implement 1-dimensional tests           | ✅ | ✅ | ⬜ |
 | Implement n-dimensional tests           | ✅ | ⬜ | ⬜ |
 | Implement performance tests             | ✅ | ⬜ | ⬜ |
 | Write documentation                     | ✅ | ⬜ | ⬜ |
