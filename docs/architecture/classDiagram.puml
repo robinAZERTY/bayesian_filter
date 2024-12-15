@@ -58,6 +58,43 @@ class Ekf <template<size_t x_dim, size_t u_dim, size_t c_dim=1, size_t z_num=1, 
 }
 
 
+class Ukf <template<size_t x_dim, size_t u_dim, size_t c_dim=1, size_t z_num=1, typename T=float>> {
+	+Ukf()
+	+Ukf(Vector_f3<T> f)
+	+~Ukf()
+	-X_sp : Matrix<T>
+	-Pxz : Matrix<T>[]
+	-h_sp : Matrix<T>[]
+	+mahalanobisDistance(const size_t z_idx) : T
+	+C : Vector<T>
+	+U : Vector<T>
+	+X : Vector<T>
+	-prev_X : Vector<T>
+	-h_val : Vector<T>[]
+	-y : Vector<T>[]
+	-h : Vector_f2<T>[]
+	-f : Vector_f3<T>
+	-initted : bool
+	-sqrt_x_dim_u_dim : const T
+	+Cov_U : ldl_matrix<T>
+	+P : ldl_matrix<T>
+	-S_inv : ldl_matrix<T>[]
+	-K : rowMajorMatrix<T>
+	-z_dim : size_t[]
+	-pre_S : symMatrix<T>[]
+	+computeCrossCorrelation(const size_t z_idx) : void
+	-computeMeasurementSigmaPoints(const size_t z_idx) : void
+	+computeResidual(const Vector<T>& Z, const size_t z_idx) : void
+	+computeResidualPrecision(const symMatrix<T>& R, const size_t z_idx) : void
+	-computeStateSigmaPoints() : void
+	+predict() : void
+	+setMeasurementFunction(Vector_f2<T> h, size_t z_dim, size_t z_idx) : void
+	+setPredictionFunction(Vector_f3<T> f) : void
+	+update(const Vector<T>& Z, const symMatrix<T>& R, const size_t z_idx) : void
+	+updateStateCovariance(const size_t z_idx) : void
+}
+
+
 
 
 
