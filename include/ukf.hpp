@@ -66,6 +66,7 @@ private:
     Matrix<T> Pxz[z_num];
 
     const T sqrt_x_dim_u_dim = sqrt(x_dim + u_dim);
+    const T sqrt_x_dim = sqrt(x_dim);
     void computeStateSigmaPoints();
     void computeMeasurementSigmaPoints(const size_t z_idx);
 

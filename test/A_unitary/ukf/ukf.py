@@ -69,8 +69,8 @@ class Ukf:
         return self.yx #return the transformed sigma points for visualization
     
     def update(self, h, z, R):
-        yy , z_hat, Pz = cubature_h(h, self.x, self.P, self.c)
-        Pz += R
+        yy , z_hat, Pzz = cubature_h(h, self.x, self.P, self.c)
+        Pz = Pzz + R
         #cross covariance
         Pxz = np.zeros((self.x_dim, z_hat.shape[0]))
         for i in range(2*self.x_dim):
@@ -85,7 +85,7 @@ class Ukf:
         K = Pxz @ np.linalg.inv(Pz)
         self.x += K @ (z - z_hat)
         self.P -= Pxz @ K.T
-        return yy #return the transformed sigma points for visualization
+        return yy, z_hat, Pzz, Pxz  #return the transformed sigma points for visualization
         
     def __str__(self) -> str:
         return f"UKF: x_dim={self.x_dim}, x={self.x}, P={self.P}, u={self.u}, Q={self.cov_u}"

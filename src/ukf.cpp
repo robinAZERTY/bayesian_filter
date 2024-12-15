@@ -52,11 +52,6 @@ void Ukf<x_dim, u_dim, c_dim, z_num, T>::computeStateSigmaPoints()
         for (size_t j = i; j < x_dim; j++)
             this->X[j] += (*tmp)(j, i);
     }
-    for (size_t i = 0; i<2*x_dim; i++)
-        for (size_t j = 0; j < x_dim; j++)
-            std::cout << X_sp(i, j) << " ";
-    std::cout << std::endl;
-
     tmp->holdMul(this->Cov_U.L, this->Cov_U.D);
     for (size_t i = 0; i < u_dim; i++)
     {
@@ -87,7 +82,7 @@ void Ukf<x_dim, u_dim, c_dim, z_num, T>::computeMeasurementSigmaPoints(const siz
     // internal::tmp<Vector<T>> *sp = internal::tmp<Vector<T>>::get(z_dim[z_idx]); // temporary sigma point
     Vector<T> sp; // temporary sigma point
     for (size_t i = 0; i < x_dim; i++)
-        this->P.D[i] = sqrt(this->P.D[i]) * sqrt_x_dim_u_dim;
+        this->P.D[i] = sqrt(this->P.D[i]) * sqrt_x_dim;
     internal::tmp<triangMatrix<T>> *tmp = internal::tmp<triangMatrix<T>>::get(x_dim);
     tmp->holdMul(this->P.L, this->P.D);
     h_sp[z_idx].fill(-1);
@@ -176,7 +171,7 @@ void Ukf<x_dim, u_dim, c_dim, z_num, T>::computeCrossCorrelation(const size_t z_
             {
                 Pxz[z_idx](j, k) += (X_sp(i, j) - X[j]) * (h_sp[z_idx](i, k) - h_val[z_idx][k]);
             }
-    Pxz[z_idx] /= h_sp[z_idx].rows() * 1.4142135623730951; // sqrt(2 * x_dim + 2 * u_dim)
+    Pxz[z_idx] /= h_sp[z_idx].rows(); // sqrt(2 * x_dim + 2 * u_dim)
 
     // Pre-compute the innovation covariance and store it in the pre_S matrix
     pre_S[z_idx].fill(0);

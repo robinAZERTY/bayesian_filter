@@ -59,7 +59,10 @@ measured_temperatures = np.zeros(len(t))
 measured_temperatures[:] = np.nan
 t_measurement = np.zeros(len(t))
 control_inputs = np.zeros(len(t))
-
+update_m_sp = np.zeros(len(t))*np.nan
+update_sp = np.zeros((len(t),2))*np.nan
+update_s_sp = np.zeros(len(t))*np.nan
+update_Pxz = np.zeros(len(t))*np.nan
 # Température initiale du four
 true_temperatures[0] = x_init
 
@@ -92,7 +95,11 @@ for i in range(1, len(t)):
     # Fx[i] = ukf.Fx.copy()
     # Fu[i] = ukf.Fu.copy()
     if not np.isnan(measured_temperatures[i]):
-        ukf.update(h, np.array([measured_temperatures[i]]), R)
+        sp, m_ms,s_sp, Pxz = ukf.update(h, np.array([measured_temperatures[i]]), R)
+        update_m_sp[i] = m_ms
+        update_sp[i] = sp.reshape(2)
+        update_s_sp[i] = s_sp
+        update_Pxz[i] = Pxz
     estimated_temperatures[i] = ukf.x.copy()
     state_covariances[i] = ukf.P.copy()
 
@@ -105,10 +112,14 @@ df = pd.DataFrame({
     'UU': control_inputs,
     'ZZ': measured_temperatures,
     'XX_hat': estimated_temperatures,
-    'P00': state_covariances[:, 0, 0],
-    # 'Fx': Fx[:, 0, 0],
-    # 'Fu': Fu[:, 0, 0],
-})
+    'P00': state_covariances[:, 0, 0]
+    # 'm_ms': update_m_sp,
+    # 'sp0': update_sp[:, 0],
+    # 'sp1': update_sp[:, 1],
+    # 's_sp': update_s_sp,
+    # 'Pxz': update_Pxz
+    
+    })
 # Conditions d'initialisation du filtre et résultats
 init_conditions = {
     'R': R,
