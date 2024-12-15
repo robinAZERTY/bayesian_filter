@@ -15,7 +15,7 @@ void Ukf<x_dim, u_dim, c_dim, z_num, T>::setMeasurementFunction(Vector_f2<T> h, 
     this->h_sp[z_idx].fill(0);
     this->h_val[z_idx].resize(z_dim);
     this->h_val[z_idx].fill(0);
-    this->Pxz[z_idx].resize(x_dim, z_dim);
+    this->Pxz[z_idx].resize(z_dim, x_dim);
 }
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
@@ -154,7 +154,6 @@ void Ukf<x_dim, u_dim, c_dim, z_num, T>::computeCrossCorrelation(const size_t z_
 
     // Compute measurement prediction sigma points
     computeMeasurementSigmaPoints(z_idx);
-
     // Compute the average and covariance of the sigma points
     // h_val[z_idx] = average(h_sp[z_idx], axis::row);
     h_val[z_idx].fill(0);
@@ -165,11 +164,13 @@ void Ukf<x_dim, u_dim, c_dim, z_num, T>::computeCrossCorrelation(const size_t z_
 
     // Compute the cross-covariance between the state and the measurement
     Pxz[z_idx].fill(0);
+    Pxz[z_idx].referT();
+
     for (size_t i = 0; i < h_sp[z_idx].rows(); i++)
         for (size_t j = 0; j < x_dim; j++)
             for (size_t k = 0; k < z_dim[z_idx]; k++)
             {
-                Pxz[z_idx](j, k) += (X_sp(i, j) - X[j]) * (h_sp[z_idx](i, k) - h_val[z_idx][k]);
+                Pxz[z_idx](k, j) += (X_sp(i, j) - X[j]) * (h_sp[z_idx](i, k) - h_val[z_idx][k]);
             }
     Pxz[z_idx] /= h_sp[z_idx].rows(); // sqrt(2 * x_dim + 2 * u_dim)
 

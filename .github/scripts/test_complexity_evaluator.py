@@ -11,7 +11,7 @@ from scipy.integrate import dblquad
 from scipy.integrate import tplquad
 import json
 
-filter_type = "ekf"
+filter_type = "ukf"
 esp_results = {"key" : [], "data" : np.array([[]])}
 
 """communication functions"""
@@ -286,7 +286,7 @@ def compare_efficiency(max_regression_relative_error=0.015):
         
     return better, regret
     
-def write_ekf_complexity_analysis():
+def write_complexity_analysis():
     with open('docs/efficiency/'+filter_type+'_complexity_analysis.json', 'w') as file:
         json.dump(ekf_complexity_analysis, file, indent=4)
     
@@ -300,7 +300,7 @@ if __name__ == "__main__":
 
     print(f"{ORANGE}Make sure you flashed the ESP32 with the 'B_efficiency/{filter_type}/test_complexity/main.cpp' sketch, then reset the ESP32 if the test does not start by itself.{RESET}")
     print("You can upload the sketch by running the following command in the terminal:")
-    print(f"{BLUE}pio test -e esp32dev -f B_efficiency/{filter_type}/test_complexity/main.cpp{RESET}")
+    print(f"{BLUE}pio test -e esp32dev --filter B_efficiency/{filter_type}/test_complexity{RESET}")
     ports = serial.tools.list_ports.comports()
     ports = [port for port in ports if "Bluetooth" not in port.description]
     if len(ports) == 1:
@@ -321,11 +321,11 @@ if __name__ == "__main__":
         pass
     ser.close()
     data_i_j_k, df, lin1, lin2, lin3, poly, poly2, X_poly1, X_poly2, X_poly3, y1, y2, y3 = analyse(esp_results)
-    plot(data_i_j_k, df, lin1, lin2, lin3, poly, poly2, show=False)
+    plot(data_i_j_k, df, lin1, lin2, lin3, poly, poly2, show=True)
     read_ekf_complexity_analysis()
     compute_ekf_complexity_analysis(X_poly1, X_poly2, X_poly3, y1, y2, y3, lin1, lin2, lin3)
     if "best release" not in ekf_complexity_analysis:
         ekf_complexity_analysis["best release"] = ekf_complexity_analysis["current release"]
     else :
         compare_efficiency()
-    write_ekf_complexity_analysis()
+    write_complexity_analysis()

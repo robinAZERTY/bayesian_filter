@@ -35,9 +35,9 @@ but it should be a good way to check that the EKF is functioning correctly for s
 #include <unity.h>
 #include <ekf.hpp>
 
-#ifdef NATIVE
-#define NAN std::nan("")
-#endif
+// #ifdef NATIVE
+// #define NAN std::nan("")
+// #endif
 
 #define TIME_STEP 10
 #define THERMAL_INERTIA 100

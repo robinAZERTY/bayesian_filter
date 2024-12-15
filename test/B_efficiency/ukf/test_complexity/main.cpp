@@ -4,7 +4,7 @@ pio test -e native
 */
 
 #define EVERYTHING_PUBLIC
-#include <ekf.hpp>
+#include <ukf.hpp>
 #include "watcher.hpp"
 #include <unity.h>
 
@@ -38,31 +38,31 @@ Watcher w4("update");
 
 
 template <size_t X_DIM, size_t U_DIM, size_t Z_DIM>
-void EkfSpeedTest(const size_t N = 10)
+void ukfSpeedTest(const size_t N = 10)
 {
   
-  internal::tmp<Vector<float>>::freeAll();
-  internal::tmp<rowMajorMatrix<float>>::freeAll();  
-  internal::tmp<Matrix<float>>::freeAll();
+  // internal::tmp<Vector<float>>::freeAll();
+  // internal::tmp<rowMajorMatrix<float>>::freeAll();  
+  // internal::tmp<Matrix<float>>::freeAll();
   internal::tmp<triangMatrix<float>>::freeAll();
   for (size_t i = 0; i < N; i++)
   {
     Watcher::resetAll();
-    Ekf<X_DIM, U_DIM> ekf(f<float>);
-    ekf.setMeasurementFunction(h<float,Z_DIM>, Z_DIM);
+    Ukf<X_DIM, U_DIM> ukf(f<float>);
+    ukf.setMeasurementFunction(h<float,Z_DIM>, Z_DIM);
     symMatrix<float> R(Z_DIM);
     Vector<float> Z(Z_DIM);
-    ekf.X.fill(0);
-    ekf.P.fill(0);
-    ekf.Cov_U.fill(0);
+    ukf.X.fill(0);
+    ukf.P.fill(0);
+    ukf.Cov_U.fill(0);
     R.fill(0);
     w3.start();
-    ekf.U.fill(0);
-    ekf.predict();
+    ukf.U.fill(0);
+    ukf.predict();
     w3.stop();
     w4.start();
     Z.fill(0);
-    ekf.update(Z, R);
+    ukf.update(Z, R);
     w4.stop();
     Serial.print(X_DIM);
     Serial.print("\t");
@@ -74,7 +74,7 @@ void EkfSpeedTest(const size_t N = 10)
     Serial.print("\t");
     Serial.print(w4.get());
     Serial.print("\t");
-    Serial.print(internal::alloc_count + sizeof(ekf));
+    Serial.print(internal::alloc_count + sizeof(ukf));
     Serial.println();
   }
 }
@@ -95,7 +95,7 @@ void IncrementalTest_z(size_t n = 1)
 {
   if constexpr (eq2(x,u,z))
   {
-    EkfSpeedTest<x,u,z>(n);
+    ukfSpeedTest<x,u,z>(n);
     IncrementalTest_z<x,u,z+step>(n);
   }
 }
@@ -123,7 +123,7 @@ void IncrementalTest_xuz(size_t n = 1)
 void setup() {
     Serial.begin(115200);
     delay(200); // Permet d'attendre que la liaison série soit établie
-    Serial.println("ekf-go");// send ekf-go to notify the start of the test
+    Serial.println("ukf-go");// send ukf-go to notify the start of the test
     Serial.println("X_DIM\tU_DIM\tZ_DIM\tprediction\tupdate\talloc");
     IncrementalTest_xuz<1,1,1>(5);
     Serial.println("end");// send esp-end to notify the end of the test
