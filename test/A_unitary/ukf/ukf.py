@@ -87,6 +87,9 @@ class Ukf:
         self.P -= Pxz @ K.T
         return yy, z_hat, Pzz, Pxz  #return the transformed sigma points for visualization
         
+    def mahalanobis(self, h, z, R):
+            yy , z_hat, Pzz = cubature_h(h, self.x, self.P, self.c)
+            return (z-z_hat) @ np.linalg.inv(Pzz+R) @ (z-z_hat)
     def __str__(self) -> str:
         return f"UKF: x_dim={self.x_dim}, x={self.x}, P={self.P}, u={self.u}, Q={self.cov_u}"
 
